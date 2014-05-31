@@ -8,24 +8,27 @@
 #define GPIO_H
 
 #include <iostream>
-#include <ofstream>
+#include <fstream>
 #include <string>
+#include <cstdlib>
 #include <cassert>
+
+using namespace std;
 
 class GPIO
 {
 	public:
-		GPIO(int pinNumber): pinNumber(pinNumber);
+		GPIO(string pinNumber);
 		~GPIO();
 
-		int ExportPin(int pinNumber);
-		int UnexportPin(int pinNumber);
+		int ExportPin();
+		int UnexportPin();
 		int SetPinDirection(string direction);
 		int SetPinValue(string value);
-		int GetPinValue();
+		int GetPinValue(string& value);
 
 	private:
-		unsigned int pinNumber;
+		string pinNumber;
 };
 
 #endif

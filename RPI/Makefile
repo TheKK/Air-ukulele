@@ -17,13 +17,13 @@ LIB += $(shell pkg-config --libs openal)
 LIB += $(shell pkg-config --libs freealut)
 
 # Object files
+OBJ_PATH = $(PWD)/obj
 OBJ = $(PWD)/obj/main.o \
       $(PWD)/obj/gpio.o
 
 OUT_EXE= air
 
 all: $(OUT_EXE)
-	@echo "Everything done"
 
 $(OUT_EXE): $(OBJ)
 	@echo "    LD    " $(notdir $@)
@@ -35,4 +35,4 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
 
 .PHONY: clean
 clean:
-	rm -frv $(OBJ) $(OUT_EXE)
+	@rm -frv $(OBJ) $(OUT_EXE)

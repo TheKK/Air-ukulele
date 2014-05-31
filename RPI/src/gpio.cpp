@@ -6,14 +6,14 @@
 
 #include "gpio.h"
 
-GPIO::GPIO(int pinNumber)
+GPIO::GPIO(string pinNumber): pinNumber(pinNumber)
 {
-	ExportPin(this->pinNumber);
+	ExportPin();
 }
 
 GPIO::~GPIO()
 {
-	UnexportPin(this->pinNumber);
+	UnexportPin();
 }
 
 int
@@ -21,7 +21,7 @@ GPIO::ExportPin()
 {
 	string command = "gpio-admin export " + this->pinNumber;
 
-	if (system(command.c_str() > 0)) {
+	if (system(command.c_str()) > 0) {
 		fprintf(stderr, "Can not execute gpio-admin, please check if you install it\n");
 		return -1;
 	} else
@@ -33,7 +33,7 @@ GPIO::UnexportPin()
 {
 	string command = "gpio-admin unexport " + this->pinNumber;
 
-	if (system(command.c_str() > 0)) {
+	if (system(command.c_str()) > 0) {
 		fprintf(stderr, "Can not execute gpio-admin, please check if you install it\n");
 		return -1;
 	} else
@@ -50,7 +50,7 @@ GPIO::SetPinDirection(string direction)
 
 	ofstream setPinDirection(filePath.c_str());
 	if (setPinDirection < 0) {
-		fprintf(stderr, "GPIO error: Can not set direction of GPIO%d\n", this->pinNumber);
+		fprintf(stderr, "GPIO error: Can not set direction of GPIO%s\n", this->pinNumber.c_str());
 		return -1;
 	}
 
@@ -61,13 +61,13 @@ GPIO::SetPinDirection(string direction)
 }
 
 int
-GPIO::SetPinValue(int value)
+GPIO::SetPinValue(string value)
 {
 	string filePath = "/sys/class/gpio/gpio" + this->pinNumber + "/value";
 
 	ofstream setPinValue(filePath.c_str());
 	if (setPinValue < 0) {
-		fprintf(stderr, "GPIO error: Can not set value of GPIO%d\n", this->pinNumber);
+		fprintf(stderr, "GPIO error: Can not set value of GPIO%s\n", this->pinNumber.c_str());
 		return -1;
 	}
 
@@ -78,18 +78,18 @@ GPIO::SetPinValue(int value)
 }
 
 int
-GPIO::GetPinValue()
+GPIO::GetPinValue(string& value)
 {
 	string filePath = "/sys/class/gpio/gpio" + this->pinNumber + "/value";
 
-	ofstream getPinValue(filePath.c_str());
+	ifstream getPinValue(filePath.c_str());
 	if (getPinValue < 0) {
-		fprintf(stderr, "GPIO error: Can not set value of GPIO%d\n", this->pinNumber);
+		fprintf(stderr, "GPIO error: Can not set value of GPIO%s\n", this->pinNumber.c_str());
 		return -1;
 	}
 
-	int value << getPinValue
+	getPinValue >> value;
 	getPinValue.close();
 
-	return value;
+	return 0;
 }
