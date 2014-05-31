@@ -19,7 +19,8 @@ LIB += $(shell pkg-config --libs freealut)
 # Object files
 OBJ_PATH = $(PWD)/obj
 OBJ = $(PWD)/obj/main.o \
-      $(PWD)/obj/gpio.o
+      $(PWD)/obj/gpio.o \
+      $(PWD)/obj/sound.o
 
 OUT_EXE= air
 
