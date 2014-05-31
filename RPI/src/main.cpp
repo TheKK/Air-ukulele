@@ -1,3 +1,9 @@
+/*
+ * Author: KK <thumbd03803@gmail.com>
+ *
+ * File: main.cpp
+ */
+
 #include <iostream>
 #include <cstdio>
 
@@ -6,6 +12,8 @@ extern "C"
 #include <AL/al.h>
 #include <AL/alut.h>
 }
+
+#include "gpio.h"
 
 using namespace std;
 
