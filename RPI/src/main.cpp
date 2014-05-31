@@ -11,6 +11,7 @@ extern "C"
 {
 #include <AL/al.h>
 #include <AL/alut.h>
+#include <unistd.h>
 }
 
 #include "gpio.h"
@@ -20,6 +21,7 @@ using namespace std;
 int
 main(int argc, char* argv[])
 {
+/*
 	//data structures
 	ALuint buffer;
 	ALenum format;
@@ -62,6 +64,19 @@ main(int argc, char* argv[])
 	alDeleteSources(1, &source1);
 	alDeleteSources(1, &source2);
 	alutExit();
-	
+*/
+	GPIO pin7("7", "out");
+
+	pin7.SetPinValue("1");
+	sleep(1);
+	pin7.SetPinValue("0");
+	sleep(1);
+	pin7.SetPinValue("1");
+	sleep(1);
+	pin7.SetPinValue("0");
+	sleep(1);
+
+	pin7.UnexportPin();
+
 	return 0;
 }

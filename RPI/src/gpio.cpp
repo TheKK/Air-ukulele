@@ -6,14 +6,16 @@
 
 #include "gpio.h"
 
-GPIO::GPIO(string pinNumber): pinNumber(pinNumber)
+GPIO::GPIO(string pinNumber, string direction):
+	pinNumber(pinNumber),
+	direction(direction)
 {
 	ExportPin();
+	SetPinDirection(this->direction);
 }
 
 GPIO::~GPIO()
 {
-	UnexportPin();
 }
 
 int
@@ -44,7 +46,7 @@ int
 GPIO::SetPinDirection(string direction)
 {
 	//Make sure input vaule is valid
-	assert(direction == "input" || direction == "output");
+	assert(direction == "in" || direction == "out");
 
 	string filePath = "/sys/class/gpio/gpio" + this->pinNumber + "/direction";
 
@@ -92,4 +94,10 @@ GPIO::GetPinValue(string& value)
 	getPinValue.close();
 
 	return 0;
+}
+
+string
+GPIO::GetPinNumber()
+{
+	return pinNumber;
 }

@@ -18,7 +18,7 @@ using namespace std;
 class GPIO
 {
 	public:
-		GPIO(string pinNumber);
+		GPIO(string pinNumber, string direction);
 		~GPIO();
 
 		int ExportPin();
@@ -26,9 +26,11 @@ class GPIO
 		int SetPinDirection(string direction);
 		int SetPinValue(string value);
 		int GetPinValue(string& value);
+		string GetPinNumber();
 
 	private:
 		string pinNumber;
+		string direction;
 };
 
 #endif
