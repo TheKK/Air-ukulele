@@ -14,7 +14,7 @@ INCLUDE = -I $(PWD)/include
 
 # Libs flags
 LIB += $(shell pkg-config --libs openal)
-LIB += $(shell pkg-config --libs freealut)
+LIB += $(shell pkg-config --libs alure)
 
 # Object files
 OBJ_PATH = $(PWD)/obj
@@ -31,8 +31,11 @@ DEBUG_OBJ = $(PWD)/obj/test.o \
 OUT_EXE = air
 DEBUG_OUT_EXE = air_debug
 
-main: $(OUT_EXE)
+# This one is used for testing on PC
 test: $(DEBUG_OUT_EXE)
+
+# This one is used on real Rpi
+real: $(OUT_EXE)
 
 $(OUT_EXE): $(OBJ)
 	@echo "    LD    " $(notdir $@)

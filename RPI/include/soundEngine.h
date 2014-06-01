@@ -13,7 +13,8 @@
 extern "C"
 {
 #include <AL/al.h>
-#include <AL/alut.h>
+#include <AL/alc.h>
+#include <AL/alure.h>
 }
 
 using namespace std;
@@ -22,10 +23,15 @@ class SoundEngine
 {
 	public:
 		static int Init();
-		static int Quit();
+		static void Quit();
+
+		static int SetListenerPos(int x, int y, int z );
 
 	private:
 		static int CheckError();
+
+		static ALCdevice* device;
+		static ALCcontext* context;
 };
 
 #endif

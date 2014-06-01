@@ -5,6 +5,8 @@
  */
 
 #include <iostream>
+#include <cstdio>
+#include <thread>
 
 extern "C"
 {
@@ -17,6 +19,8 @@ extern "C"
 
 using namespace std;
 
+bool appIsRunning = true;
+
 int
 Init()
 {
@@ -27,9 +31,25 @@ Init()
 }
 
 void
+EventHandler()
+{
+}
+
+void
+Update()
+{
+}
+
+void
 CleanUp()
 {
 	SoundEngine::Quit();
+}
+
+void
+gpioStateChecker()
+{
+	fprintf(stdout, "From another thread\n");
 }
 
 int
@@ -40,6 +60,11 @@ main(int argc, char* argv[])
 
 	Sound testSound("./sound/sound.wav");
 	testSound.Play();
+
+	//while (appIsRunning) {
+		//EventHandler();
+		//Update();
+	//}
 
 	sleep(2);
 

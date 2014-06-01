@@ -28,7 +28,7 @@ Sound::LoadSoundFile(string filePath)
 	/*alutLoadMemoryFromFile("sound.wav", &format, &data, &size, &freq, &loop);
 	alBufferData(buffer, format, data, size, freq);
 	alutUnloadWAV(format, data, size, freq);*/
-	this->buffer = alutCreateBufferFromFile(filePath.c_str());
+	this->buffer = alureCreateBufferFromFile(filePath.c_str());
 	if (alGetError() != AL_NO_ERROR)
 		return -1;
 
@@ -45,11 +45,11 @@ Sound::LoadSoundFile(string filePath)
 int
 Sound::UnloadSoundFile()
 {
-	alDeleteBuffers(1, &this->buffer);
+	alDeleteSources(1, &this->source);
 	if (alGetError() != AL_NO_ERROR)
 		return -1;
 
-	alDeleteSources(1, &this->source);
+	alDeleteBuffers(1, &this->buffer);
 	if (alGetError() != AL_NO_ERROR)
 		return -1;
 
