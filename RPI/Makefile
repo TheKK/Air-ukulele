@@ -20,10 +20,12 @@ LIB += $(shell pkg-config --libs freealut)
 OBJ_PATH = $(PWD)/obj
 OBJ = $(PWD)/obj/main.o \
       $(PWD)/obj/gpio.o \
+      $(PWD)/obj/soundEngine.o \
       $(PWD)/obj/sound.o
 
 DEBUG_OBJ = $(PWD)/obj/test.o \
 	    $(PWD)/obj/gpio.o \
+	    $(PWD)/obj/soundEngine.o \
 	    $(PWD)/obj/sound.o
 
 OUT_EXE = air

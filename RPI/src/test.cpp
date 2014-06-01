@@ -5,31 +5,45 @@
  */
 
 #include <iostream>
-#include <cstdio>
 
 extern "C"
 {
-#include <AL/al.h>
-#include <AL/alut.h>
 #include <unistd.h>
 }
 
 #include "gpio.h"
 #include "sound.h"
+#include "soundEngine.h"
 
 using namespace std;
 
 int
+Init()
+{
+	if (SoundEngine::Init() < 0)
+		return 1;
+
+	return 0;
+}
+
+void
+CleanUp()
+{
+	SoundEngine::Quit();
+}
+
+int
 main(int argc, char* argv[])
 {
-	alutInit(NULL, NULL);
+	if (Init() < 0)
+		return 1;
 
 	Sound testSound("./sound/sound.wav");
 	testSound.Play();
 
 	sleep(2);
 
-	alutExit();
+	CleanUp();
 
 	return 0;
 }
