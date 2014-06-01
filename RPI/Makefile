@@ -1,7 +1,7 @@
  #
  # Author: KK <thumbd03803@gmail.com>
  #
- # Makefile
+ # File: Makefile
  #
 
 CXX = g++
@@ -22,13 +22,23 @@ OBJ = $(PWD)/obj/main.o \
       $(PWD)/obj/gpio.o \
       $(PWD)/obj/sound.o
 
-OUT_EXE= air
+DEBUG_OBJ = $(PWD)/obj/test.o \
+	    $(PWD)/obj/gpio.o \
+	    $(PWD)/obj/sound.o
 
-all: $(OUT_EXE)
+OUT_EXE = air
+DEBUG_OUT_EXE = air_debug
+
+main: $(OUT_EXE)
+test: $(DEBUG_OUT_EXE)
 
 $(OUT_EXE): $(OBJ)
 	@echo "    LD    " $(notdir $@)
 	@$(CXX) $(OBJ) $(CXXFLAG) $(LIB) -o $@
+
+$(DEBUG_OUT_EXE): $(DEBUG_OBJ)
+	@echo "    LD    " $(notdir $@)
+	@$(CXX) $(DEBUG_OBJ) $(CXXFLAG) $(LIB) -o $@
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
 	@echo "    CC    " $(notdir $@)
@@ -36,4 +46,4 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
 
 .PHONY: clean
 clean:
-	@rm -frv $(OBJ) $(OUT_EXE)
+	@rm -frv $(OBJ) $(OUT_EXE) $(DEBUG_OUT_EXE)
