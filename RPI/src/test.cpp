@@ -21,18 +21,32 @@ using namespace std;
 
 bool appIsRunning = true;
 
+//Sounds
+Sound* testSound = NULL;
+
 int
 Init()
 {
 	if (SoundEngine::Init() < 0)
 		return 1;
 
+	testSound = new Sound("./sound/sound.wav");
+
 	return 0;
 }
 
 void
-EventHandler()
+EventHandler(int event)
 {
+	switch (event) {
+		//q, quit
+		case 113:
+			appIsRunning = false;
+			break;
+		//z, trigger 1
+		case 122:
+			testSound->Play();
+	}
 }
 
 void
@@ -49,7 +63,6 @@ CleanUp()
 void
 gpioStateChecker()
 {
-	fprintf(stdout, "From another thread\n");
 }
 
 int
@@ -58,15 +71,16 @@ main(int argc, char* argv[])
 	if (Init() < 0)
 		return 1;
 
-	Sound testSound("./sound/sound.wav");
-	testSound.Play();
+	int event;
 
-	//while (appIsRunning) {
-		//EventHandler();
-		//Update();
-	//}
+	while (appIsRunning) {
+		event = getc(stdin);
+		printf("%d\n", event);
 
-	sleep(2);
+		EventHandler(event);
+
+		Update();
+	}
 
 	CleanUp();
 

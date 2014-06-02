@@ -15,6 +15,7 @@ INCLUDE = -I $(PWD)/include
 # Libs flags
 LIB += $(shell pkg-config --libs openal)
 LIB += $(shell pkg-config --libs alure)
+LIB += $(shell pkg-config --libs sdl2)
 
 # Object files
 OBJ_PATH = $(PWD)/obj
