@@ -20,6 +20,7 @@
 *.out
 *.app
 air
+air_debug
 
 # Stupid swap file
 *.swp
