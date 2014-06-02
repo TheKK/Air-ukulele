@@ -14,7 +14,8 @@ Requirement
 Installation
 ------------
 
-Just type `make`
+- `make real`: to make application running on real raspberryPi
+- `make test`: to make application running PC for testing functions
 
 Author
 ------
@@ -24,5 +25,5 @@ TheKK/KK <thumbd03803@gmail.com>
 License
 -------
 
-This part of our project is license under [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html)
-See LICENSE in this folder for more information
+This part of our project is license under [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html).
+See LICENSE in this folder for more information.
