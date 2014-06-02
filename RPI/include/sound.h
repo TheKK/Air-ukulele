@@ -14,7 +14,6 @@
 extern "C"
 {
 #include <AL/al.h>
-#include <AL/alc.h>
 #include <AL/alure.h>
 }
 
@@ -30,6 +29,8 @@ class Sound
 		int LoadSoundFile(string filePath);
 		int UnloadSoundFile();
 
+		void SetSourcePosition(int x, int y, int z);
+
 		//Sound control
 		void Play();
 		void Stop();
@@ -37,16 +38,11 @@ class Sound
 
 	private:
 		ALuint source;
-
 		ALuint buffer;
 
-		ALint state;
-
-		//ALenum format;
-		//ALsizei size;
-		//ALvoid* data;
-		//ALsizei freq;
-		//ALboolean loop;
+		int sourcePosX = 0;
+		int sourcePosY = 0;
+		int sourcePosZ = 0;
 };
 
 #endif

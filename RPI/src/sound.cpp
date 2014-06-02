@@ -21,21 +21,12 @@ Sound::LoadSoundFile(string filePath)
 {
 	//Gen buffer
 	alGenBuffers(1, &this->buffer);
-	if (alGetError() != AL_NO_ERROR)
-		return -1;
-
-	//Load audio file
-	/*alutLoadMemoryFromFile("sound.wav", &format, &data, &size, &freq, &loop);
-	alBufferData(buffer, format, data, size, freq);
-	alutUnloadWAV(format, data, size, freq);*/
-	this->buffer = alureCreateBufferFromFile(filePath.c_str());
-	if (alGetError() != AL_NO_ERROR)
-		return -1;
 
 	//Make a source
 	alGenSources(1, &this->source);
-	if (alGetError() != AL_NO_ERROR)
-		return -1;
+
+	//Load audio file
+	this->buffer = alureCreateBufferFromFile(filePath.c_str());
 
 	alSourcei(this->source, AL_BUFFER, this->buffer);
 
@@ -54,6 +45,16 @@ Sound::UnloadSoundFile()
 		return -1;
 
 	return 0;
+}
+
+void
+Sound::SetSourcePosition(int x, int y, int z)
+{
+	this->sourcePosX = x;
+	this->sourcePosY = y;
+	this->sourcePosZ = z;
+
+	alSource3i(this->source, AL_POSITION, x, y, z);
 }
 
 void

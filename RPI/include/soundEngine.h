@@ -13,7 +13,6 @@
 extern "C"
 {
 #include <AL/al.h>
-#include <AL/alc.h>
 #include <AL/alure.h>
 }
 
@@ -32,6 +31,11 @@ class SoundEngine
 
 		static ALCdevice* device;
 		static ALCcontext* context;
+
+		//Listener position
+		static int listenerPosX;
+		static int listenerPosY;
+		static int listenerPosZ;
 };
 
 #endif
