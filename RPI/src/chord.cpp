@@ -8,9 +8,6 @@
 
 Chord::Chord(string sound1, string sound2, string sound3, string sound4, string sound5)
 {
-	for (int i = 0; i < NUMBER_OF_STRING; i++)
-		stringIsPressed[i] = false;
-
 	LoadAllSound(sound1, sound2, sound3, sound4, sound5);
 }
 
@@ -66,57 +63,31 @@ Chord::PressOnString(int position)
 
 	switch (position) {
 		case 1:
-			stringIsPressed[0] = true;
+			nowPressing_ = 1;
 			break;
 		case 2:
-			stringIsPressed[1] = true;
+			nowPressing_ = 2;
 			break;
 		case 3:
-			stringIsPressed[2] = true;
+			nowPressing_ = 3;
 			break;
 		case 4:
-			stringIsPressed[3] = true;
-			break;
-		case 5:
-			stringIsPressed[4] = true;
+			nowPressing_ = 4;
 			break;
 	}
 }
 
 void
-Chord::ReleaseFromString(int position)
+Chord::ReleaseFromString()
 {
-	assert(position >= 1 && position <= 5);
-
-	switch (position) {
-		case 1:
-			stringIsPressed[0] = false;
-			break;
-		case 2:
-			stringIsPressed[1] = false;
-			break;
-		case 3:
-			stringIsPressed[2] = false;
-			break;
-		case 4:
-			stringIsPressed[3] = false;
-			break;
-		case 5:
-			stringIsPressed[4] = false;
-			break;
-	}
+	nowPressing_ = 0;
 }
 
 void
 Chord::Pluck()
 {
-	//Stop playing sound
-	sound_[nowPlaying]->Stop();
+	sound_[nowPlaying_]->Stop();
+	sound_[nowPressing_]->Play();
 
-	for (int i = NUMBER_OF_STRING - 1; i >= 0; i--)
-		if (stringIsPressed[i]) {
-			sound_[i]->Play();
-			nowPlaying = i;
-			return;
-		}
+	nowPlaying_ = nowPressing_;
 }

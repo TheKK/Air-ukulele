@@ -27,8 +27,16 @@ Sound::LoadSoundFile(string filePath)
 
 	//Load audio file
 	buffer_ = alureCreateBufferFromFile(filePath.c_str());
+	if (buffer_ == AL_NONE) {
+		fprintf(stderr, "AL error: file %s not found\n", filePath.c_str());
+		return -1;
+	}
 
 	alSourcei(source_, AL_BUFFER, buffer_);
+	if (alGetError() != AL_NO_ERROR) {
+		fprintf(stderr, "AL error: %s", alureGetErrorString());
+		return -1;
+	}
 
 	return 0;
 }
@@ -37,12 +45,16 @@ int
 Sound::UnloadSoundFile()
 {
 	alDeleteSources(1, &source_);
-	if (alGetError() != AL_NO_ERROR)
+	if (alGetError() != AL_NO_ERROR) {
+		fprintf(stderr, "AL error: %s", alureGetErrorString());
 		return -1;
+	}
 
 	alDeleteBuffers(1, &buffer_);
-	if (alGetError() != AL_NO_ERROR)
+	if (alGetError() != AL_NO_ERROR) {
+		fprintf(stderr, "AL error: %s", alureGetErrorString());
 		return -1;
+	}
 
 	return 0;
 }
