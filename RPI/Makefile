@@ -28,7 +28,8 @@ OBJ = $(PWD)/obj/main.o \
 DEBUG_OBJ = $(PWD)/obj/test.o \
 	    $(PWD)/obj/gpio.o \
 	    $(PWD)/obj/soundEngine.o \
-	    $(PWD)/obj/sound.o
+	    $(PWD)/obj/sound.o \
+	    $(PWD)/obj/chord.o
 
 OUT_EXE = air
 DEBUG_OUT_EXE = air_debug

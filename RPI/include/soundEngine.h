@@ -25,17 +25,16 @@ class SoundEngine
 		static void Quit();
 
 		static int SetListenerPos(int x, int y, int z );
-
 	private:
 		static int CheckError();
 
-		static ALCdevice* device;
-		static ALCcontext* context;
+		static ALCdevice* device_;
+		static ALCcontext* context_;
 
 		//Listener position
-		static int listenerPosX;
-		static int listenerPosY;
-		static int listenerPosZ;
+		static int listenerPosX_;
+		static int listenerPosY_;
+		static int listenerPosZ_;
 };
 
 #endif

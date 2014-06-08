@@ -9,7 +9,6 @@
 
 #include <string>
 #include <cstdio>
-#include <cassert>
 
 extern "C"
 {
@@ -35,14 +34,13 @@ class Sound
 		void Play();
 		void Stop();
 		void Pause();
-
 	private:
-		ALuint source;
-		ALuint buffer;
+		ALuint source_;
+		ALuint buffer_;
 
-		int sourcePosX = 0;
-		int sourcePosY = 0;
-		int sourcePosZ = 0;
+		int sourcePosX_ = 0;
+		int sourcePosY_ = 0;
+		int sourcePosZ_ = 0;
 };
 
 #endif

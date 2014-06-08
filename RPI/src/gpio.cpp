@@ -7,11 +7,11 @@
 #include "gpio.h"
 
 GPIO::GPIO(string pinNumber, string direction):
-	pinNumber(pinNumber),
-	direction(direction)
+	pinNumber_(pinNumber),
+	direction_(direction)
 {
 	ExportPin();
-	SetPinDirection(this->direction);
+	SetPinDirection(direction_);
 }
 
 GPIO::~GPIO()
@@ -21,7 +21,7 @@ GPIO::~GPIO()
 int
 GPIO::ExportPin()
 {
-	string command = "gpio-admin export " + this->pinNumber;
+	string command = "gpio-admin export " + pinNumber_;
 
 	if (system(command.c_str()) > 0) {
 		fprintf(stderr, "Can not execute gpio-admin, please check if you install it\n");
@@ -33,7 +33,7 @@ GPIO::ExportPin()
 int
 GPIO::UnexportPin()
 {
-	string command = "gpio-admin unexport " + this->pinNumber;
+	string command = "gpio-admin unexport " + pinNumber_;
 
 	if (system(command.c_str()) > 0) {
 		fprintf(stderr, "Can not execute gpio-admin, please check if you install it\n");
@@ -47,16 +47,17 @@ GPIO::SetPinDirection(string direction)
 {
 	//Make sure input vaule is valid
 	assert(direction == "in" || direction == "out");
+	direction_ = direction;
 
-	string filePath = "/sys/class/gpio/gpio" + this->pinNumber + "/direction";
+	string filePath = "/sys/class/gpio/gpio" + pinNumber_ + "/direction";
 
 	ofstream setPinDirection(filePath.c_str());
 	if (setPinDirection < 0) {
-		fprintf(stderr, "GPIO error: Can not set direction of GPIO%s\n", this->pinNumber.c_str());
+		fprintf(stderr, "GPIO error: Can not set direction of GPIO%s\n", pinNumber_.c_str());
 		return -1;
 	}
 
-	setPinDirection << direction;
+	setPinDirection << direction_;
 	setPinDirection.close();
 
 	return 0;
@@ -65,11 +66,11 @@ GPIO::SetPinDirection(string direction)
 int
 GPIO::SetPinValue(string value)
 {
-	string filePath = "/sys/class/gpio/gpio" + this->pinNumber + "/value";
+	string filePath = "/sys/class/gpio/gpio" + pinNumber_ + "/value";
 
 	ofstream setPinValue(filePath.c_str());
 	if (setPinValue < 0) {
-		fprintf(stderr, "GPIO error: Can not set value of GPIO%s\n", this->pinNumber.c_str());
+		fprintf(stderr, "GPIO error: Can not set value of GPIO%s\n", pinNumber_.c_str());
 		return -1;
 	}
 
@@ -82,11 +83,11 @@ GPIO::SetPinValue(string value)
 int
 GPIO::GetPinValue(string& value)
 {
-	string filePath = "/sys/class/gpio/gpio" + this->pinNumber + "/value";
+	string filePath = "/sys/class/gpio/gpio" + pinNumber_ + "/value";
 
 	ifstream getPinValue(filePath.c_str());
 	if (getPinValue < 0) {
-		fprintf(stderr, "GPIO error: Can not set value of GPIO%s\n", this->pinNumber.c_str());
+		fprintf(stderr, "GPIO error: Can not set value of GPIO%s\n", pinNumber_.c_str());
 		return -1;
 	}
 
@@ -99,5 +100,5 @@ GPIO::GetPinValue(string& value)
 string
 GPIO::GetPinNumber()
 {
-	return pinNumber;
+	return pinNumber_;
 }

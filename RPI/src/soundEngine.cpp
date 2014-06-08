@@ -6,27 +6,27 @@
 
 #include "soundEngine.h"
 
-ALCdevice* SoundEngine::device;
-ALCcontext* SoundEngine::context;
+ALCdevice* SoundEngine::device_;
+ALCcontext* SoundEngine::context_;
 
-int SoundEngine::listenerPosX;
-int SoundEngine::listenerPosY;
-int SoundEngine::listenerPosZ;
+int SoundEngine::listenerPosX_;
+int SoundEngine::listenerPosY_;
+int SoundEngine::listenerPosZ_;
 
 int
 SoundEngine::Init()
 {
 	//Init device
-	device = alcOpenDevice(NULL);
-	context = alcCreateContext(device, NULL);
+	device_ = alcOpenDevice(NULL);
+	context_ = alcCreateContext(device_, NULL);
 
-	alcMakeContextCurrent(context);
+	alcMakeContextCurrent(context_);
 
 	//Init listener position
-	listenerPosX = 0;
-	listenerPosY = 0;
-	listenerPosZ = 0;
-	alListener3i(AL_POSITION, listenerPosX, listenerPosY, listenerPosZ);
+	listenerPosX_ = 0;
+	listenerPosY_ = 0;
+	listenerPosZ_ = 0;
+	alListener3i(AL_POSITION, listenerPosX_, listenerPosY_, listenerPosZ_);
 
 	if (CheckError() < 0)
 		return -1;
@@ -39,11 +39,11 @@ SoundEngine::Quit()
 {
 	alcMakeContextCurrent(NULL);
 
-	alcDestroyContext(context);
-	context = NULL;
+	alcDestroyContext(context_);
+	context_ = NULL;
 
-	alcCloseDevice(device);
-	device = NULL;
+	alcCloseDevice(device_);
+	device_ = NULL;
 }
 
 int

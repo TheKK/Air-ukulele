@@ -27,10 +27,9 @@ class GPIO
 		int SetPinValue(string value);
 		int GetPinValue(string& value);
 		string GetPinNumber();
-
 	private:
-		string pinNumber;
-		string direction;
+		string pinNumber_;
+		string direction_;
 };
 
 #endif

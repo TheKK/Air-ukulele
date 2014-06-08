@@ -20,15 +20,15 @@ int
 Sound::LoadSoundFile(string filePath)
 {
 	//Gen buffer
-	alGenBuffers(1, &this->buffer);
+	alGenBuffers(1, &buffer_);
 
-	//Make a source
-	alGenSources(1, &this->source);
+	//Make a source_
+	alGenSources(1, &source_);
 
 	//Load audio file
-	this->buffer = alureCreateBufferFromFile(filePath.c_str());
+	buffer_ = alureCreateBufferFromFile(filePath.c_str());
 
-	alSourcei(this->source, AL_BUFFER, this->buffer);
+	alSourcei(source_, AL_BUFFER, buffer_);
 
 	return 0;
 }
@@ -36,11 +36,11 @@ Sound::LoadSoundFile(string filePath)
 int
 Sound::UnloadSoundFile()
 {
-	alDeleteSources(1, &this->source);
+	alDeleteSources(1, &source_);
 	if (alGetError() != AL_NO_ERROR)
 		return -1;
 
-	alDeleteBuffers(1, &this->buffer);
+	alDeleteBuffers(1, &buffer_);
 	if (alGetError() != AL_NO_ERROR)
 		return -1;
 
@@ -50,27 +50,27 @@ Sound::UnloadSoundFile()
 void
 Sound::SetSourcePosition(int x, int y, int z)
 {
-	this->sourcePosX = x;
-	this->sourcePosY = y;
-	this->sourcePosZ = z;
+	sourcePosX_ = x;
+	sourcePosY_ = y;
+	sourcePosZ_ = z;
 
-	alSource3i(this->source, AL_POSITION, x, y, z);
+	alSource3i(source_, AL_POSITION, x, y, z);
 }
 
 void
 Sound::Play()
 {
-	alSourcePlay(this->source);
+	alSourcePlay(source_);
 }
 
 void
 Sound::Stop()
 {
-	alSourceStop(this->source);
+	alSourceStop(source_);
 }
 
 void
 Sound::Pause()
 {
-	alSourcePause(this->source);
+	alSourcePause(source_);
 }
