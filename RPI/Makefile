@@ -29,7 +29,8 @@ DEBUG_OBJ = $(PWD)/obj/test.o \
 	    $(PWD)/obj/gpio.o \
 	    $(PWD)/obj/soundEngine.o \
 	    $(PWD)/obj/sound.o \
-	    $(PWD)/obj/chord.o
+	    $(PWD)/obj/chord.o \
+	    $(PWD)/obj/spi.o \
 
 OUT_EXE = air
 DEBUG_OUT_EXE = air_debug
@@ -54,4 +55,4 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
 
 .PHONY: clean
 clean:
-	@rm -frv $(OBJ) $(OUT_EXE) $(DEBUG_OUT_EXE)
+	@rm -frv $(OBJ_PATH)/*  $(OUT_EXE) $(DEBUG_OUT_EXE)

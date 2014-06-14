@@ -19,6 +19,7 @@ extern "C"
 //My own classes
 #include "soundEngine.h"
 #include "gpio.h"
+#include "spi.h"
 #include "chord.h"
 
 using namespace std;
@@ -45,6 +46,8 @@ bool spaceKeyIsPressing = false;
 bool appIsRunning = true;
 queue<enum EventType> keyEventQueue;
 Chord* chord1;
+
+SPIDevice spi("0");
 
 int
 Init()
