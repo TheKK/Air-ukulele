@@ -14,12 +14,14 @@ extern "C"
 {
 #include <unistd.h>
 #include <curses.h>
+#include <wiringPi.h>
+#include <wiringPiSPI.h>
 }
 
 //My own classes
 #include "soundEngine.h"
-#include "gpio.h"
 #include "chord.h"
+#include "spi.h"
 
 using namespace std;
 
@@ -31,23 +33,24 @@ enum EventType
 	j_IS_PRESSED,
 	k_IS_PRESSED,
 	q_IS_PRESSED,
-	pin_IS_PRESSED,
-	pin_IS_RELEASED,
+	MSG_IS_C,
+	MSG_IS_L,
 	SPACE_IS_PRESSED,
 };
-
 
 bool appIsRunning = true;
 queue<enum EventType> keyEventQueue;
 
 Chord* chord1;
 
-GPIO pin7("7", "in");
-string pin7Value("0");
+NRF24 radio(0, 40, 4000000, 10, 6);
 
 int
 Init()
 {
+	wiringPiSetup();
+	pinMode(11, INPUT);
+
 	if (SoundEngine::Init() < 0)
 		return 1;
 
@@ -103,11 +106,11 @@ EventHandler(enum EventType eventType)
 			chord1->Pluck();
 			mvprintw(12, 10, "Event: Pluck\n");
 			break;
-		case pin_IS_PRESSED:
-			mvprintw(12, 10, "Event: pin is pressed\n");
+		case MSG_IS_C:
+			mvprintw(12, 10, "Event: 'C' from outer space\n");
 			break;
-		case pin_IS_RELEASED:
-			mvprintw(12, 10, "Event: pin is released\n");
+		case MSG_IS_L:
+			mvprintw(12, 10, "Event: 'L' from outer space\n");
 			break;
 	}
 }
@@ -159,16 +162,25 @@ StateChcker()
 					break;
 			}
 		}
+	}
+}
 
-		string currentPinValue;
-		pin7.GetPinValue(currentPinValue);
-		if (currentPinValue != pin7Value) {
-			if (currentPinValue == "0")
-				keyEventQueue.push(pin_IS_PRESSED);
-			else if (currentPinValue == "1")
-				keyEventQueue.push(pin_IS_RELEASED);
+void
+Listener()
+{
+	unsigned char symbol;
 
-			pin7Value = currentPinValue;
+	while (appIsRunning) {
+		symbol = radio.ReceiveData();
+		switch (symbol) {
+			case 0:
+				break;
+			case 'C':
+				keyEventQueue.push(MSG_IS_C);
+				break;
+			case 'L':
+				keyEventQueue.push(MSG_IS_L);
+				break;
 		}
 	}
 }
@@ -180,6 +192,7 @@ main(int argc, char* argv[])
 		return 1;
 
 	thread keyChecker(StateChcker);
+	thread msgChecker(Listener);
 
 	enum EventType event;
 	while (appIsRunning) {
@@ -190,8 +203,9 @@ main(int argc, char* argv[])
 		}
 	}
 
-	//Make sure
+	//Make sure they will get together
 	keyChecker.join();
+	msgChecker.join();
 
 	CleanUp();
 

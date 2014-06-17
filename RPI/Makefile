@@ -16,11 +16,12 @@ INCLUDE = -I $(PWD)/include
 LIB += $(shell pkg-config --libs openal)
 LIB += $(shell pkg-config --libs alure)
 LIB += $(shell pkg-config --libs ncurses)
+LIB += -lwiringPi
 
 # Object files
 OBJ_PATH = $(PWD)/obj
 OBJ = $(PWD)/obj/main.o \
-      $(PWD)/obj/gpio.o \
+      $(PWD)/obj/spi.o \
       $(PWD)/obj/soundEngine.o \
       $(PWD)/obj/sound.o \
       $(PWD)/obj/chord.o

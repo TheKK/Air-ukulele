@@ -4,43 +4,50 @@
  * File: spi.h
  */
 
-#ifndef SPI_H
-#define SPI_H
+#ifndef NRF24_H
+#define NRF24_H
 
 #include <iostream>
-#include <fstream>
-#include <string>
 
 extern "C"
 {
-#include <fcntl.h>
-#include <asm-generic/ioctl.h>
-#include <linux/spi/spidev.h>
+#include <wiringPi.h>
+#include <wiringPiSPI.h>
 };
+
+#include "NRF24L01.h"
+
+#define TX_ADR_WIDTH	5
+#define TX_PLOAD_WIDTH	10
 
 using namespace std;
 
-class SPIDevice
+class NRF24
 {
 	public:
-		SPIDevice(string chipSelect, string bus = "0")
-		{
-			string devPath = "/dev/apidev" + bus + "." + chipSelect;
-			fd = open(devPath.c_str(), O_RDWR);
+		NRF24(int SPIChannel, int rfChannel, int speed, int cePin, int csnPin);
+		~NRF24();
 
-			if (fd < 0)
-				cout << "device not found" << endl;
-			else
-				cout << "device found!" << endl;
-		}
-
-		void
-		transaction()
-		{
-
-		}
+		unsigned char ReceiveData();
 	private:
-		int fd;
+		unsigned char TX_ADDRESS[TX_ADR_WIDTH] =
+		{
+			0x34, 0x43, 0x10, 0x10, 0x01
+		};
+
+		unsigned char rx_buf[TX_PLOAD_WIDTH] = {0};
+
+		int cePin;
+		int csnPin;
+
+		unsigned char SPI_RW(unsigned char byte);
+		unsigned char SPI_RW_Reg(unsigned char reg, unsigned char value);
+		unsigned char SPI_Read(unsigned char reg);
+		unsigned char SPI_Read_Buf(unsigned char reg, unsigned char *pBuf, unsigned char bytes);
+		unsigned char SPI_Write_Buf(unsigned char reg, unsigned char *pBuf, unsigned char bytes);
+		void RX_Mode(int channel);
+		void IO_Init();
+
 };
 
 #endif

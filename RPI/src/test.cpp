@@ -47,7 +47,7 @@ bool appIsRunning = true;
 queue<enum EventType> keyEventQueue;
 Chord* chord1;
 
-SPIDevice spi("0");
+SPIDevice spi("0", "0");
 
 int
 Init()
