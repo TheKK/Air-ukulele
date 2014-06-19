@@ -36,35 +36,22 @@ void radio_Setup()
 
 	init_io();                        // Initialize IO port
 
-	unsigned char sstatus=SPI_Read(STATUS);
-	Serial.println("*******************TX_Mode Start****************************");
-	Serial.print("status = ");
-	Serial.println(sstatus,HEX);     // There is read the mode’s status register, the default value should be ‘E’
-
 	TX_Mode();                       // set TX mode
 }
 
 void radio_SendData(unsigned char data)
 {
 	unsigned char sstatus = SPI_Read(STATUS);                   // read register STATUS's value
-	Serial.print("status = ");
-	Serial.println(sstatus,HEX);     // There is read the mode’s status register, the default value should be ‘E’
 
-	/*
-	 *
-	 * Do what you want here!!
-	 *
-	 */
+	tx_buf[0] = data;
 
 	if(sstatus&TX_DS)                                           // if receive data ready (TX_DS) interrupt
 	{
-		Serial.println("TX_DS");
 		SPI_RW_Reg(FLUSH_TX,0);
 		SPI_Write_Buf(WR_TX_PLOAD,tx_buf,TX_PLOAD_WIDTH);       // write playload to TX_FIFO
 	}
 	if(sstatus&MAX_RT)                                         // if receive data ready (MAX_RT) interrupt, this is retransmit than  SETUP_RETR                          
 	{
-		Serial.println("MAX_RT");
 		SPI_RW_Reg(FLUSH_TX,0);
 		SPI_Write_Buf(WR_TX_PLOAD,tx_buf,TX_PLOAD_WIDTH);      // disable standy-mode
 	}
