@@ -12,13 +12,6 @@
  **  Created by ElecFreaks. Robi.W,11 June 2011                      **
  **                                                                  **
  **  http://www.elecfreaks.com                                       **
- **                                                                  **
- **   SPI-compatible                                                 **
- **   CS - to digital pin 8                                          **
- **   CSN - to digital pin 9  (SS pin)                               **
- **   MOSI - to digital pin 11 (MOSI pin)                            **
- **   MISO - to digital pin 12 (MISO pin)                            **
- **   CLK - to digital pin 13 (SCK pin)                              **
  *********************************************************************/
 
 #include "radio.h"
