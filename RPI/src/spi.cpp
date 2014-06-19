@@ -43,6 +43,7 @@ NRF24::ReceiveData()
 	if (status & RX_DR) {
 		SPI_Read_Buf(RD_RX_PLOAD, rx_buf, TX_PLOAD_WIDTH);
 		SPI_RW_Reg(FLUSH_RX, 0);
+
 		toReturn = rx_buf[0];
 	} else
 		toReturn = 0;

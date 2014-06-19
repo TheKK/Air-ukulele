@@ -27,7 +27,7 @@ using namespace std;
 
 enum EventType
 {
-	s_IS_PRESSED = 0,
+	s_IS_PRESSED = 0x01,
 	d_IS_PRESSED,
 	f_IS_PRESSED,
 	j_IS_PRESSED,
@@ -36,20 +36,21 @@ enum EventType
 	MSG_IS_C,
 	MSG_IS_L,
 	SPACE_IS_PRESSED,
+	BUTTON_IS_PRESSED,
+	BUTTON_IS_RELEASEED
 };
 
 bool appIsRunning = true;
 queue<enum EventType> keyEventQueue;
 
-Chord* chord1;
-
 NRF24 radio(0, 40, 4000000, 10, 6);
+
+Chord* chord1;
 
 int
 Init()
 {
 	wiringPiSetup();
-	pinMode(11, INPUT);
 
 	if (SoundEngine::Init() < 0)
 		return 1;
@@ -107,10 +108,17 @@ EventHandler(enum EventType eventType)
 			mvprintw(12, 10, "Event: Pluck\n");
 			break;
 		case MSG_IS_C:
+			chord1->Pluck();
 			mvprintw(12, 10, "Event: 'C' from outer space\n");
 			break;
 		case MSG_IS_L:
 			mvprintw(12, 10, "Event: 'L' from outer space\n");
+			break;
+		case BUTTON_IS_RELEASEED:
+			mvprintw(12, 10, "Event: Button is released\n");
+			break;
+		case BUTTON_IS_PRESSED:
+			mvprintw(12, 10, "Event: Button is pressed\n");
 			break;
 	}
 }
@@ -180,6 +188,8 @@ Listener()
 				break;
 			case 'L':
 				keyEventQueue.push(MSG_IS_L);
+				break;
+			default:
 				break;
 		}
 	}
