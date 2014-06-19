@@ -4,6 +4,11 @@
  * File: spi.h
  */
 
+/*
+ * This class is a port from Arduino version, EF_nRF24L01_TX.c, made by ElecFraks.
+ * Please checkout his/her site http://www.elecfreaks.com
+ */
+
 #ifndef NRF24_H
 #define NRF24_H
 
