@@ -1,7 +1,7 @@
-int flexSensorPin0 = A3; // da mu zi
-int flexSensorPin1 = A0; // shi zi
-int flexSensorPin2 = A1; // zong zi
-int flexSensorPin3 = A2; // u min zi
+int flexSensorPin0 = A3;	// da mu zi
+int flexSensorPin1 = A0;	// shi zi
+int flexSensorPin2 = A1;	// zong zi
+int flexSensorPin3 = A2;	// wu min zi
 
 int flexSensorReading0 = analogRead(flexSensorPin0); 
 int flexSensorReading1 = analogRead(flexSensorPin1);
@@ -35,12 +35,12 @@ int UKflex()
 	//*****finish get the % of flex sensor
 
 	//*****start to reset toggle
-	if(flexrate0 >= benchMark && toggle[0] == 1){
+	if(flexrate0 >= benchMark && toggle[0] == 1)
 		toggle[0] = 0;
+	if(flexrate1 >= benchMark && toggle[1] == 1){
+		toggle[1] = 0;
 		return 5;
 	}
-	if(flexrate1 >= benchMark && toggle[1] == 1)
-		toggle[1] = 0;
 	if(flexrate2 >= benchMark && toggle[2] == 1)
 		toggle[2] = 0;
 	if(flexrate3 >= benchMark && toggle[3] == 1)
