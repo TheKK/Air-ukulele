@@ -49,26 +49,18 @@ int UKflex()
 	if(flexrate0<benchMark && toggle[0] == 0){
 		toggle[0]=1;
 		returnValue=1;
-
-		Serial.println(returnValue);
 	}
 	else if(flexrate1<benchMark && toggle[1] == 0){
 		toggle[1]=1;
 		returnValue=2;
-
-		Serial.println(returnValue);
 	}
 	else if(flexrate2<benchMark && toggle[2] == 0){
 		toggle[2]=1;
 		returnValue=3;
-
-		Serial.println(returnValue);
 	}
 	else if(flexrate3<benchMark && toggle[3] == 0){
 		toggle[3]=1;
 		returnValue=4;
-
-		Serial.println(returnValue);
 	}
 	//***********end flex sensor buf write and toggle status
 

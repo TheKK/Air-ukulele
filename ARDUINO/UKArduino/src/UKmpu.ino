@@ -7,27 +7,37 @@
 MPU6050 accelgyro;
 //MPU6050 accelgyro(0x69); // <-- use for AD0 high
 
-int16_t ax, ay, az;
-int16_t gx, gy, gz;
-int16_t count = 0;
-int16_t p = 0;
-int16_t n = 0;
-int16_t i = 0;
+int ax, ay, az;
+int lock = 0;
+int debounce = 0;
+int mpuReturn = 0;
+
+int nextTotal = 0;
+int preTotal = 0;
+int checkTotal = 0;
 
 int UKmpu(){
+	mpuReturn = 0;
 	accelgyro.getAcceleration(&ax, &ay, &az);
-	n = ax;
+	nextTotal = ax + ay + az;
 
-	if (i == 0 && n - p >= 5000){
-		i = 1;
+	checkTotal = (nextTotal - preTotal) > 0 ? (nextTotal - preTotal) : (preTotal - nextTotal);
+
+	if (lock == 0 && preTotal != 0 && debounce == 0 && checkTotal >= 11000){
+		lock = 1;
+		debounce = 11;
+		mpuReturn = 1;
 	}
-	if (i == 1 && n - p < 5000){
-		i = 0;
+	if (lock == 1 && checkTotal < 11000){
+		lock = 0;
 	}
 
-	p = ax;
+	preTotal = nextTotal;
 
-	return i;
+	if(debounce > 0)
+		debounce--;
+
+	return mpuReturn;
 }
 
 void UKmpu_Setup() {
@@ -46,3 +56,4 @@ void UKmpu_Setup() {
 	Serial.println("Testing device connections...");
 	Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
 }
+
