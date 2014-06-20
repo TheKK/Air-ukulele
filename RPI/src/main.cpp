@@ -35,9 +35,7 @@ enum EventType
 	q_IS_PRESSED,
 	MSG_IS_C,
 	MSG_IS_L,
-	SPACE_IS_PRESSED,
-	BUTTON_IS_PRESSED,
-	BUTTON_IS_RELEASEED
+	SPACE_IS_PRESSED
 };
 
 bool appIsRunning = true;
@@ -46,6 +44,9 @@ queue<enum EventType> keyEventQueue;
 NRF24 radio(0, 40, 4000000, 10, 6);
 
 Chord* chord1;
+Chord* chord2;
+Chord* chord3;
+Chord* chord4;
 
 int
 Init()
@@ -113,12 +114,6 @@ EventHandler(enum EventType eventType)
 			break;
 		case MSG_IS_L:
 			mvprintw(12, 10, "Event: 'L' from outer space\n");
-			break;
-		case BUTTON_IS_RELEASEED:
-			mvprintw(12, 10, "Event: Button is released\n");
-			break;
-		case BUTTON_IS_PRESSED:
-			mvprintw(12, 10, "Event: Button is pressed\n");
 			break;
 	}
 }
