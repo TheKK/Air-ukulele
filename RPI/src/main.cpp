@@ -93,7 +93,8 @@ enum EventType
 
 	// System
 	QUIT_IS_PRESENT,
-	PLUCK_IS_PRESENT
+	PLUCK_IS_PRESENT,
+	CUT_IS_PRESENT
 };
 
 bool appIsRunning = true;
@@ -106,10 +107,24 @@ queue<enum EventType> passwdQueue;
 Chord* currentChord[NUMBER_OF_STRING];
 Chord* normalChord[NUMBER_OF_STRING];
 
+Sound* cutSound;
 Sound* happySound;
 Sound* specialSound;
 
 NRF24* radio;
+
+void
+ChangeSoundset(enum SoundSet set)
+{
+	switch (set) {
+		case SOUNDSET_NORMAL:
+			for (int i = 0; i < NUMBER_OF_STRING; i++)
+				currentChord[i] = normalChord[i];
+			break;
+		case SOUNDSET_SPECIAL:
+			break;
+	}
+}
 
 int
 Init()
@@ -159,6 +174,7 @@ Init()
 
 	ChangeSoundset(SOUNDSET_NORMAL);
 
+	cutSound = new Sound("./sound/audio/cut.wav");
 	happySound = new Sound("./sound/happyMode.wav");
 	specialSound = new Sound("./sound/audio/special.wav");
 
@@ -176,19 +192,6 @@ Init()
 	printw("Use 'q' to quit..\n");
 
 	return 0;
-}
-
-void
-ChangeSoundset(enum SoundSet set)
-{
-	switch (set) {
-		case SOUNDSET_NORMAL:
-			for (int i = 0; i < NUMBER_OF_STRING; i++)
-				currentChord[i] = normalChord[i];
-			break;
-		case SOUNDSET_SPECIAL:
-			break;
-	}
 }
 
 void
@@ -302,6 +305,10 @@ NormalEventHandler(enum EventType eventType)
 			currentChord[2]->Pluck();
 			currentChord[3]->Pluck();
 			mvprintw(12, 10, "Event: Pluck on all strings\n");
+			break;
+		case CUT_IS_PRESENT:
+			cutSound->Play();
+			mvprintw(12, 10, "Event: Cut on all strings\n");
 			break;
 		// System
 		case QUIT_IS_PRESENT:
@@ -455,6 +462,12 @@ CleanUp()
 
 	delete happySound;
 	happySound = NULL;
+
+	delete specialSound;
+	specialSound = NULL;
+
+	delete cutSound;
+	cutSound = NULL;
 
 	endwin();
 }
