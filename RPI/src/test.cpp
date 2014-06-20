@@ -95,6 +95,7 @@ queue<enum EventType> keyEventQueue;
 bool secretIsOn = false;
 queue<enum EventType> passwdQueue;
 
+Chord* currentChord[4];
 Chord* normalChord[4];
 Sound* happySound;
 Sound* specialSound;
@@ -140,6 +141,11 @@ Init()
 			"./sound/audio/R4.wav",
 			"./sound/audio/R5.wav"
 			);
+
+	currentChord[0] = normalChord[0];
+	currentChord[1] = normalChord[1];
+	currentChord[2] = normalChord[2];
+	currentChord[3] = normalChord[3];
 
 	happySound = new Sound("./sound/happyMode.wav");
 	specialSound = new Sound("./sound/audio/special.wav");
@@ -299,32 +305,73 @@ void
 HappyEventHandler(enum EventType eventType)
 {
 	if (eventType == SPACE_IS_PRESSED) {
-		switch (++happyCount) {
-			case 1:
-				normalChord[0]->PressOnString(1);
-				normalChord[0]->Pluck();
+		switch (++happyCount) { case 1:
+				currentChord[1]->PressOnString(1);
+				currentChord[3]->PressOnString(2);
+				currentChord[0]->Pluck();
+				currentChord[3]->Pluck();
 				break;
 			case 2:
-				normalChord[0]->PressOnString(2);
-				normalChord[0]->Pluck();
+				currentChord[2]->Pluck();
 				break;
 			case 3:
-				normalChord[0]->PressOnString(3);
-				normalChord[0]->Pluck();
+				currentChord[0]->Pluck();
 				break;
 			case 4:
-				normalChord[0]->PressOnString(4);
-				normalChord[0]->Pluck();
+				currentChord[1]->Pluck();
 				break;
 			case 5:
-				normalChord[0]->PressOnString(1);
-				normalChord[0]->Pluck();
+				currentChord[0]->Pluck();
+				currentChord[3]->Pluck();
 				break;
 			case 6:
-				normalChord[0]->PressOnString(2);
-				normalChord[0]->Pluck();
+				currentChord[2]->Pluck();
 				break;
 			case 7:
+				currentChord[0]->PressOnString(3);
+				currentChord[0]->Pluck();
+				break;
+			case 8:
+				currentChord[2]->Pluck();
+				break;
+			case 9:
+				currentChord[0]->PressOnString(3);
+				currentChord[1]->ReleaseFromString();
+				currentChord[2]->ReleaseFromString();
+				currentChord[3]->ReleaseFromString();
+
+				currentChord[0]->Pluck();
+				currentChord[3]->Pluck();
+				break;
+			case 10:
+				currentChord[0]->PressOnString(1);
+
+				currentChord[0]->Pluck();
+				break;
+			case 11:
+				currentChord[0]->Pluck();
+				break;
+			case 12:
+				currentChord[0]->ReleaseFromString();
+
+				currentChord[0]->Pluck();
+				break;
+			case 13:
+				currentChord[0]->PressOnString(3);
+
+				currentChord[1]->Pluck();
+				currentChord[3]->Pluck();
+				break;
+			case 14:
+				currentChord[2]->Pluck();
+				break;
+			case 15:
+				currentChord[1]->Pluck();
+				break;
+			case 16:
+				currentChord[0]->Pluck();
+				break;
+			default:
 				appMode = APP_NORMAL_MODE;
 				happyCount = 0;
 				secretIsOn = false;

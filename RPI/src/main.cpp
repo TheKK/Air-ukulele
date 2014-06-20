@@ -339,30 +339,75 @@ HappyEventHandler(enum EventType eventType)
 	if (eventType == PLUCK_IS_PRESENT) {
 		switch (++happyCount) {
 			case 1:
-				currentChord[0]->PressOnString(1);
+				currentChord[0]->ReleaseFromString();
+				currentChord[1]->PressOnString(1);
+				currentChord[2]->ReleaseFromString();
+				currentChord[3]->PressOnString(2);
+
 				currentChord[0]->Pluck();
+				currentChord[3]->Pluck();
 				break;
 			case 2:
-				currentChord[0]->PressOnString(2);
-				currentChord[0]->Pluck();
+				currentChord[2]->Pluck();
 				break;
 			case 3:
-				currentChord[0]->PressOnString(3);
 				currentChord[0]->Pluck();
 				break;
 			case 4:
-				currentChord[0]->PressOnString(4);
-				currentChord[0]->Pluck();
+				currentChord[1]->Pluck();
 				break;
 			case 5:
-				currentChord[0]->PressOnString(1);
 				currentChord[0]->Pluck();
+				currentChord[3]->Pluck();
 				break;
 			case 6:
-				currentChord[0]->PressOnString(2);
-				currentChord[0]->Pluck();
+				currentChord[2]->Pluck();
 				break;
 			case 7:
+				currentChord[0]->PressOnString(3);
+				currentChord[0]->Pluck();
+				break;
+			case 8:
+				currentChord[2]->Pluck();
+				break;
+			case 9:
+				currentChord[0]->PressOnString(3);
+				currentChord[1]->ReleaseFromString();
+				currentChord[2]->ReleaseFromString();
+				currentChord[3]->ReleaseFromString();
+
+				currentChord[0]->Pluck();
+				currentChord[3]->Pluck();
+				break;
+			case 10:
+				currentChord[0]->PressOnString(1);
+
+				currentChord[0]->Pluck();
+				break;
+			case 11:
+				currentChord[0]->Pluck();
+				break;
+			case 12:
+				currentChord[0]->ReleaseFromString();
+
+				currentChord[0]->Pluck();
+				break;
+			case 13:
+				currentChord[0]->PressOnString(3);
+
+				currentChord[1]->Pluck();
+				currentChord[3]->Pluck();
+				break;
+			case 14:
+				currentChord[2]->Pluck();
+				break;
+			case 15:
+				currentChord[1]->Pluck();
+				break;
+			case 16:
+				currentChord[0]->Pluck();
+				break;
+			default:
 				appMode = APP_NORMAL_MODE;
 				happyCount = 0;
 				secretIsOn = false;
