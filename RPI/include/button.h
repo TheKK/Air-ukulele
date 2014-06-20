@@ -19,25 +19,24 @@ using namespace std;
 enum ButtonState
 {
 	BUTTON_NOTHING = 0x01,
-	BUTTON_PRESSED,
-	BUTTON_RELEASED
+	BUTTON_ALL_RELEASE,
+	BUTTON1_PRESSED,
+	BUTTON2_PRESSED,
+	BUTTON3_PRESSED,
+	BUTTON4_PRESSED,
+	BUTTON5_PRESSED
 };
 
 class Button
 {
 	public:
-		Button(int pinNumber);
+		Button(int pin1, int pin2, int pin3);
 
 		enum ButtonState State();
 	private:
-		int pinNumber_;
-		/*
-		 * Because we use pull up resistor,
-		 * when the button is setup its default value is 1.
-		 * When this button is pressed, its value will turn 0.
-		 * When this button is released, its value will turn 1 again.
-		 */
-		int previousValue_ = 1;
+		int pinNumber_[3];
+		enum ButtonState previousState = BUTTON_NOTHING;
+		
 };
 
 #endif
