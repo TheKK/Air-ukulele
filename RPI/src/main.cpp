@@ -34,7 +34,8 @@ enum ApplicationMode
 
 enum SoundSet
 {
-	SOUNDSET_NORMAL = 0x00
+	SOUNDSET_NORMAL = 0x00,
+	SOUNDSET_SPECIAL
 };
 
 //Normal mode variables
@@ -47,36 +48,40 @@ int happyCount = 0;
 enum EventType
 {
 	// String 1
-	two_IS_PRESSED = 0x01,
-	three_IS_PRESSED,
-	four_IS_PRESSED,
-	seven_IS_PRESSED,
-	eight_IS_PRESSED,
-	nine_IS_PRESSED,
+	STRING1_RELEASE = 0x01,
+	STRING1_POS1_PRESS,
+	STRING1_POS2_PRESS,
+	STRING1_POS3_PRESS,
+	STRING1_POS4_PRESS,
+	STRING1_POS5_PRESS,
+	STRING1_PLUCK,
 
 	// String 2
-	w_IS_PRESSED,
-	e_IS_PRESSED,
-	r_IS_PRESSED,
-	u_IS_PRESSED,
-	i_IS_PRESSED,
-	o_IS_PRESSED,
+	STRING2_RELEASE,
+	STRING2_POS1_PRESS,
+	STRING2_POS2_PRESS,
+	STRING2_POS3_PRESS,
+	STRING2_POS4_PRESS,
+	STRING2_POS5_PRESS,
+	STRING2_PLUCK,
 
 	// String 3
-	s_IS_PRESSED,
-	d_IS_PRESSED,
-	f_IS_PRESSED,
-	j_IS_PRESSED,
-	k_IS_PRESSED,
-	l_IS_PRESSED,
+	STRING3_RELEASE,
+	STRING3_POS1_PRESS,
+	STRING3_POS2_PRESS,
+	STRING3_POS3_PRESS,
+	STRING3_POS4_PRESS,
+	STRING3_POS5_PRESS,
+	STRING3_PLUCK,
 
 	// String 4
-	x_IS_PRESSED,
-	c_IS_PRESSED,
-	v_IS_PRESSED,
-	m_IS_PRESSED,
-	mm_IS_PRESSED,
-	mmm_IS_PRESSED,
+	STRING4_RELEASE,
+	STRING4_POS1_PRESS,
+	STRING4_POS2_PRESS,
+	STRING4_POS3_PRESS,
+	STRING4_POS4_PRESS,
+	STRING4_POS5_PRESS,
+	STRING4_PLUCK,
 
 	// Code
 	UP_IS_PRESSED,
@@ -87,8 +92,8 @@ enum EventType
 	b_IS_PRESSED,
 
 	// System
-	q_IS_PRESSED,
-	SPACE_IS_PRESSED
+	QUIT_IS_PRESENT,
+	PLUCK_IS_PRESENT
 };
 
 bool appIsRunning = true;
@@ -97,7 +102,10 @@ queue<enum EventType> keyEventQueue;
 bool secretIsOn = false;
 queue<enum EventType> passwdQueue;
 
-Chord* normalChord[4];
+#define NUMBER_OF_STRING	4
+Chord* currentChord[NUMBER_OF_STRING];
+Chord* normalChord[NUMBER_OF_STRING];
+
 Sound* happySound;
 Sound* specialSound;
 
@@ -149,6 +157,8 @@ Init()
 			"./sound/audio/R5.wav"
 			);
 
+	ChangeSoundset(SOUNDSET_NORMAL);
+
 	happySound = new Sound("./sound/happyMode.wav");
 	specialSound = new Sound("./sound/audio/special.wav");
 
@@ -169,132 +179,145 @@ Init()
 }
 
 void
+ChangeSoundset(enum SoundSet set)
+{
+	switch (set) {
+		case SOUNDSET_NORMAL:
+			for (int i = 0; i < NUMBER_OF_STRING; i++)
+				currentChord[i] = normalChord[i];
+			break;
+		case SOUNDSET_SPECIAL:
+			break;
+	}
+}
+
+void
 NormalEventHandler(enum EventType eventType)
 {
 	switch (eventType) {
 		// String 1
-		case two_IS_PRESSED:
-			normalChord[0]->ReleaseFromString();
+		case STRING1_RELEASE:
+			currentChord[0]->ReleaseFromString();
 			mvprintw(12, 10, "Event: Release string from string 1\n");
 			break;
-		case three_IS_PRESSED:
-			normalChord[0]->PressOnString(1);
+		case STRING1_POS1_PRESS:
+			currentChord[0]->PressOnString(1);
 			mvprintw(12, 10, "Event: Press position 1 on string 1\n");
 			break;
-		case four_IS_PRESSED:
-			normalChord[0]->PressOnString(2);
+		case STRING1_POS2_PRESS:
+			currentChord[0]->PressOnString(2);
 			mvprintw(12, 10, "Event: Press position 2 on string 1\n");
 			break;
-		case seven_IS_PRESSED:
-			normalChord[0]->PressOnString(3);
+		case STRING1_POS3_PRESS:
+			currentChord[0]->PressOnString(3);
 			mvprintw(12, 10, "Event: Press position 3 on string 1\n");
 			break;
-		case eight_IS_PRESSED:
-			normalChord[0]->PressOnString(4);
+		case STRING1_POS4_PRESS:
+			currentChord[0]->PressOnString(4);
 			mvprintw(12, 10, "Event: Press position 4 on string 1\n");
 			break;
-		case nine_IS_PRESSED:
-			normalChord[0]->Pluck();
+		case STRING1_PLUCK:
+			currentChord[0]->Pluck();
 			mvprintw(12, 10, "Event: Pluck on string 1\n");
 			break;
 		// String 2
-		case w_IS_PRESSED:
-			normalChord[1]->ReleaseFromString();
+		case STRING2_RELEASE:
+			currentChord[1]->ReleaseFromString();
 			mvprintw(12, 10, "Event: Release string from string 2\n");
 			break;
-		case e_IS_PRESSED:
-			normalChord[1]->PressOnString(1);
+		case STRING2_POS1_PRESS:
+			currentChord[1]->PressOnString(1);
 			mvprintw(12, 10, "Event: Press position 1 on string 2\n");
 			break;
-		case r_IS_PRESSED:
-			normalChord[1]->PressOnString(2);
+		case STRING2_POS2_PRESS:
+			currentChord[1]->PressOnString(2);
 			mvprintw(12, 10, "Event: Press position 2 on string 2\n");
 			break;
-		case u_IS_PRESSED:
-			normalChord[1]->PressOnString(3);
+		case STRING2_POS3_PRESS:
+			currentChord[1]->PressOnString(3);
 			mvprintw(12, 10, "Event: Press position 3 on string 2\n");
 			break;
-		case i_IS_PRESSED:
-			normalChord[1]->PressOnString(4);
+		case STRING2_POS4_PRESS:
+			currentChord[1]->PressOnString(4);
 			mvprintw(12, 10, "Event: Press position 4 on string 2\n");
 			break;
-		case o_IS_PRESSED:
-			normalChord[1]->Pluck();
+		case STRING2_PLUCK:
+			currentChord[1]->Pluck();
 			mvprintw(12, 10, "Event: Pluck on string 2\n");
 			break;
 		// String 3
-		case s_IS_PRESSED:
-			normalChord[2]->ReleaseFromString();
+		case STRING3_RELEASE:
+			currentChord[2]->ReleaseFromString();
 			mvprintw(12, 10, "Event: Release string from string 3\n");
 			break;
-		case d_IS_PRESSED:
-			normalChord[2]->PressOnString(1);
+		case STRING3_POS1_PRESS:
+			currentChord[2]->PressOnString(1);
 			mvprintw(12, 10, "Event: Press position 1 on string 3\n");
 			break;
-		case f_IS_PRESSED:
-			normalChord[2]->PressOnString(2);
+		case STRING3_POS2_PRESS:
+			currentChord[2]->PressOnString(2);
 			mvprintw(12, 10, "Event: Press position 2 on string 3\n");
 			break;
-		case j_IS_PRESSED:
-			normalChord[2]->PressOnString(3);
+		case STRING3_POS3_PRESS:
+			currentChord[2]->PressOnString(3);
 			mvprintw(12, 10, "Event: Press position 3 on string 3\n");
 			break;
-		case k_IS_PRESSED:
-			normalChord[2]->PressOnString(4);
+		case STRING3_POS4_PRESS:
+			currentChord[2]->PressOnString(4);
 			mvprintw(12, 10, "Event: Press position 4 on string 3\n");
 			break;
-		case l_IS_PRESSED:
-			normalChord[2]->Pluck();
+		case STRING3_PLUCK:
+			currentChord[2]->Pluck();
 			mvprintw(12, 10, "Event: Pluck on string 3\n");
 			break;
 		// String 4
-		case x_IS_PRESSED:
-			normalChord[3]->ReleaseFromString();
+		case STRING4_RELEASE:
+			currentChord[3]->ReleaseFromString();
 			mvprintw(12, 10, "Event: Release string from string 4\n");
 			break;
-		case c_IS_PRESSED:
-			normalChord[3]->PressOnString(1);
+		case STRING4_POS1_PRESS:
+			currentChord[3]->PressOnString(1);
 			mvprintw(12, 10, "Event: Press position 1 on string 4\n");
 			break;
-		case v_IS_PRESSED:
-			normalChord[3]->PressOnString(2);
+		case STRING4_POS2_PRESS:
+			currentChord[3]->PressOnString(2);
 			mvprintw(12, 10, "Event: Press position 2 on string 4\n");
 			break;
-		case m_IS_PRESSED:
-			normalChord[3]->PressOnString(3);
+		case STRING4_POS3_PRESS:
+			currentChord[3]->PressOnString(3);
 			mvprintw(12, 10, "Event: Press position 3 on string 4\n");
 			break;
-		case mm_IS_PRESSED:
-			normalChord[3]->PressOnString(4);
+		case STRING4_POS4_PRESS:
+			currentChord[3]->PressOnString(4);
 			mvprintw(12, 10, "Event: Press position 4 on string 4\n");
 			break;
-		case mmm_IS_PRESSED:
-			normalChord[3]->Pluck();
+		case STRING4_PLUCK:
+			currentChord[3]->Pluck();
 			mvprintw(12, 10, "Event: Pluck on string 4\n");
 			break;
 		// All string
-		case SPACE_IS_PRESSED:
-			normalChord[0]->Pluck();
-			normalChord[1]->Pluck();
-			normalChord[2]->Pluck();
-			normalChord[3]->Pluck();
+		case PLUCK_IS_PRESENT:
+			currentChord[0]->Pluck();
+			currentChord[1]->Pluck();
+			currentChord[2]->Pluck();
+			currentChord[3]->Pluck();
 			mvprintw(12, 10, "Event: Pluck on all strings\n");
 			break;
 		// System
-		case q_IS_PRESSED:
+		case QUIT_IS_PRESENT:
 			appIsRunning = false;
 			break;
 	}
 
 	// Long press to quit
-	if (eventType == eight_IS_PRESSED)
+	if (eventType == STRING1_POS4_PRESS)
 		if (restartCounter++ == 10)
 			appIsRunning = false;
 	else
 		restartCounter == 0;
 
 	// Long press to quit
-	if (eventType == three_IS_PRESSED)
+	if (eventType == STRING1_POS1_PRESS)
 		if (specialCounter++ == 10) {
 			specialSound->Play();
 			specialCounter = 0;
@@ -306,31 +329,31 @@ NormalEventHandler(enum EventType eventType)
 void
 HappyEventHandler(enum EventType eventType)
 {
-	if (eventType == SPACE_IS_PRESSED) {
+	if (eventType == PLUCK_IS_PRESENT) {
 		switch (++happyCount) {
 			case 1:
-				normalChord[0]->PressOnString(1);
-				normalChord[0]->Pluck();
+				currentChord[0]->PressOnString(1);
+				currentChord[0]->Pluck();
 				break;
 			case 2:
-				normalChord[0]->PressOnString(2);
-				normalChord[0]->Pluck();
+				currentChord[0]->PressOnString(2);
+				currentChord[0]->Pluck();
 				break;
 			case 3:
-				normalChord[0]->PressOnString(3);
-				normalChord[0]->Pluck();
+				currentChord[0]->PressOnString(3);
+				currentChord[0]->Pluck();
 				break;
 			case 4:
-				normalChord[0]->PressOnString(4);
-				normalChord[0]->Pluck();
+				currentChord[0]->PressOnString(4);
+				currentChord[0]->Pluck();
 				break;
 			case 5:
-				normalChord[0]->PressOnString(1);
-				normalChord[0]->Pluck();
+				currentChord[0]->PressOnString(1);
+				currentChord[0]->Pluck();
 				break;
 			case 6:
-				normalChord[0]->PressOnString(2);
-				normalChord[0]->Pluck();
+				currentChord[0]->PressOnString(2);
+				currentChord[0]->Pluck();
 				break;
 			case 7:
 				appMode = APP_NORMAL_MODE;
@@ -453,79 +476,79 @@ StateChcker()
 			switch (keyCode) {
 				// String 1
 				case '2':
-					eventType = two_IS_PRESSED;
+					eventType = STRING1_RELEASE;
 					break;
 				case '3':
-					eventType = three_IS_PRESSED;
+					eventType = STRING1_POS1_PRESS;
 					break;
 				case '4':
-					eventType = four_IS_PRESSED;
+					eventType = STRING1_POS2_PRESS;
 					break;
 				case '7':
-					eventType = seven_IS_PRESSED;
+					eventType = STRING1_POS3_PRESS;
 					break;
 				case '8':
-					eventType = eight_IS_PRESSED;
+					eventType = STRING1_POS4_PRESS;
 					break;
 				case '9':
-					eventType = nine_IS_PRESSED;
+					eventType = STRING1_PLUCK;
 					break;
 				// String 2
 				case 'w':
-					eventType = w_IS_PRESSED;
+					eventType = STRING2_RELEASE;
 					break;
 				case 'e':
-					eventType = e_IS_PRESSED;
+					eventType = STRING2_POS1_PRESS;
 					break;
 				case 'r':
-					eventType = r_IS_PRESSED;
+					eventType = STRING2_POS2_PRESS;
 					break;
 				case 'u':
-					eventType = u_IS_PRESSED;
+					eventType = STRING2_POS3_PRESS;
 					break;
 				case 'i':
-					eventType = i_IS_PRESSED;
+					eventType = STRING2_POS4_PRESS;
 					break;
 				case 'o':
-					eventType = o_IS_PRESSED;
+					eventType = STRING2_PLUCK;
 					break;
 				// String 3
 				case 's':
-					eventType = s_IS_PRESSED;
+					eventType = STRING3_RELEASE;
 					break;
 				case 'd':
-					eventType = d_IS_PRESSED;
+					eventType = STRING3_POS1_PRESS;
 					break;
 				case 'f':
-					eventType = f_IS_PRESSED;
+					eventType = STRING3_POS2_PRESS;
 					break;
 				case 'j':
-					eventType = j_IS_PRESSED;
+					eventType = STRING3_POS3_PRESS;
 					break;
 				case 'k':
-					eventType = k_IS_PRESSED;
+					eventType = STRING3_POS4_PRESS;
 					break;
 				case 'l':
-					eventType = l_IS_PRESSED;
+					eventType = STRING3_PLUCK;
 					break;
 				// String 4
 				case 'x':
-					eventType = x_IS_PRESSED;
+					eventType = STRING4_RELEASE;
 					break;
 				case 'c':
-					eventType = c_IS_PRESSED;
+					eventType = STRING4_POS1_PRESS;
 					break;
 				case 'v':
-					eventType = v_IS_PRESSED;
+					eventType = STRING4_POS2_PRESS;
 					break;
 				case 'm':
-					eventType = m_IS_PRESSED;
+					eventType = STRING4_POS3_PRESS;
 					break;
 				case ',':
-					eventType = mm_IS_PRESSED;
+					eventType = STRING4_POS4_PRESS;
 					break;
 				case '.':
-					eventType = mmm_IS_PRESSED;
+					eventType = STRING4_PLUCK;
 					break;
 				// Code
 				case KEY_UP:
@@ -548,10 +571,10 @@ StateChcker()
 					break;
 				// Pluck
 				case 'q':
-					eventType = q_IS_PRESSED;
+					eventType = QUIT_IS_PRESENT;
 					break;
 				case ' ':
-					eventType = SPACE_IS_PRESSED;
+					eventType = PLUCK_IS_PRESENT;
 					break;
 			}
 
@@ -571,16 +594,22 @@ Listener()
 			case 0:
 				break;
 			case 'Q':
-				keyEventQueue.push(nine_IS_PRESSED);
+				keyEventQueue.push(STRING1_PLUCK);
 				break;
 			case 'W':
-				keyEventQueue.push(o_IS_PRESSED);
+				keyEventQueue.push(STRING2_PLUCK);
 				break;
 			case 'E':
-				keyEventQueue.push(l_IS_PRESSED);
+				keyEventQueue.push(STRING3_PLUCK);
 				break;
 			case 'R':
-				keyEventQueue.push(mmm_IS_PRESSED);
+				keyEventQueue.push(STRING4_PLUCK);
+				break;
+			case 'P':
+				keyEventQueue.push(PLUCK_IS_PRESENT);
+				break;
+			case 'C':
+				keyEventQueue.push(CUT_IS_PRESENT);
 				break;
 			default:
 				break;
