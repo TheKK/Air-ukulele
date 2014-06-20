@@ -6,9 +6,9 @@
 
 #include "chord.h"
 
-Chord::Chord(string sound1, string sound2, string sound3, string sound4, string sound5)
+Chord::Chord(string sound1, string sound2, string sound3, string sound4, string sound5, string sound6)
 {
-	LoadAllSound(sound1, sound2, sound3, sound4, sound5);
+	LoadAllSound(sound1, sound2, sound3, sound4, sound5, sound6);
 }
 
 Chord::~Chord()
@@ -17,13 +17,14 @@ Chord::~Chord()
 }
 
 int
-Chord::LoadAllSound(string sound1, string sound2, string sound3, string sound4, string sound5)
+Chord::LoadAllSound(string sound1, string sound2, string sound3, string sound4, string sound5, string sound6)
 {
 	sound_[0] = new Sound(sound1);
 	sound_[1] = new Sound(sound2);
 	sound_[2] = new Sound(sound3);
 	sound_[3] = new Sound(sound4);
 	sound_[4] = new Sound(sound5);
+	sound_[5] = new Sound(sound6);
 
 	return 0;
 }
@@ -31,7 +32,7 @@ Chord::LoadAllSound(string sound1, string sound2, string sound3, string sound4, 
 int
 Chord::UnloadAllSound()
 {
-	for (int i = 0; i < NUMBER_OF_STRING; i++) {
+	for (int i = 0; i < NUMBER_OF_POSITION; i++) {
 		delete sound_[i];
 		sound_[i] = NULL;
 	}
@@ -59,22 +60,9 @@ Chord::UnloadASound(int which)
 void
 Chord::PressOnString(int position)
 {
-	assert(position >= 1 && position <= 5);
+	assert(position >= 1 && position <= NUMBER_OF_POSITION);
 
-	switch (position) {
-		case 1:
-			nowPressing_ = 1;
-			break;
-		case 2:
-			nowPressing_ = 2;
-			break;
-		case 3:
-			nowPressing_ = 3;
-			break;
-		case 4:
-			nowPressing_ = 4;
-			break;
-	}
+	nowPressing_ = position;
 }
 
 void

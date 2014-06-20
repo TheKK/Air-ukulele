@@ -18,9 +18,29 @@ extern "C"
 
 //My own classes
 #include "soundEngine.h"
+#include "sound.h"
 #include "chord.h"
 
 using namespace std;
+
+enum ApplicationMode
+{
+	APP_NORMAL_MODE = 0x01,
+	APP_HAPPY_MODE,
+	APP_SPECIAL_MODE
+} appMode;
+
+enum SoundSet
+{
+	SOUNDSET_NORMAL = 0x00
+};
+
+//Normal mode variables
+int restartCounter = 0;
+int specialCounter = 0;
+
+//Happy mode variables
+int happyCount = 0;
 
 enum EventType
 {
@@ -75,10 +95,9 @@ queue<enum EventType> keyEventQueue;
 bool secretIsOn = false;
 queue<enum EventType> passwdQueue;
 
-Chord* chord1;
-Chord* chord2;
-Chord* chord3;
-Chord* chord4;
+Chord* normalChord[4];
+Sound* happySound;
+Sound* specialSound;
 
 int
 Init()
@@ -86,37 +105,47 @@ Init()
 	if (SoundEngine::Init() < 0)
 		return 1;
 
-	chord1 = new Chord(
+	normalChord[0] = new Chord(
 			"./sound/audio/Q0.wav",
 			"./sound/audio/Q1.wav",
 			"./sound/audio/Q2.wav",
 			"./sound/audio/Q3.wav",
-			"./sound/audio/Q4.wav"
+			"./sound/audio/Q4.wav",
+			"./sound/audio/Q5.wav"
 			);
 
-	chord2 = new Chord(
+	normalChord[1] = new Chord(
 			"./sound/audio/W0.wav",
 			"./sound/audio/W1.wav",
 			"./sound/audio/W2.wav",
 			"./sound/audio/W3.wav",
-			"./sound/audio/W4.wav"
+			"./sound/audio/W4.wav",
+			"./sound/audio/W5.wav"
 			);
 
-	chord3 = new Chord(
+	normalChord[2] = new Chord(
 			"./sound/audio/E0.wav",
 			"./sound/audio/E1.wav",
 			"./sound/audio/E2.wav",
 			"./sound/audio/E3.wav",
-			"./sound/audio/E4.wav"
+			"./sound/audio/E4.wav",
+			"./sound/audio/E5.wav"
 			);
 
-	chord4 = new Chord(
+	normalChord[3] = new Chord(
 			"./sound/audio/R0.wav",
 			"./sound/audio/R1.wav",
 			"./sound/audio/R2.wav",
 			"./sound/audio/R3.wav",
-			"./sound/audio/R4.wav"
+			"./sound/audio/R4.wav",
+			"./sound/audio/R5.wav"
 			);
+
+	happySound = new Sound("./sound/happyMode.wav");
+	specialSound = new Sound("./sound/audio/special.wav");
+
+	appMode = APP_NORMAL_MODE;
+
 	//Ncurses
 	initscr();
 	cbreak();
@@ -132,121 +161,175 @@ Init()
 }
 
 void
-EventHandler(enum EventType eventType)
+NormalEventHandler(enum EventType eventType)
 {
 	switch (eventType) {
 		// String 1
 		case two_IS_PRESSED:
-			chord1->ReleaseFromString();
+			normalChord[0]->ReleaseFromString();
 			mvprintw(12, 10, "Event: Release string from string 1\n");
 			break;
 		case three_IS_PRESSED:
-			chord1->PressOnString(1);
+			normalChord[0]->PressOnString(1);
 			mvprintw(12, 10, "Event: Press position 1 on string 1\n");
 			break;
 		case four_IS_PRESSED:
-			chord1->PressOnString(2);
+			normalChord[0]->PressOnString(2);
 			mvprintw(12, 10, "Event: Press position 2 on string 1\n");
 			break;
 		case seven_IS_PRESSED:
-			chord1->PressOnString(3);
+			normalChord[0]->PressOnString(3);
 			mvprintw(12, 10, "Event: Press position 3 on string 1\n");
 			break;
 		case eight_IS_PRESSED:
-			chord1->PressOnString(4);
+			normalChord[0]->PressOnString(4);
 			mvprintw(12, 10, "Event: Press position 4 on string 1\n");
 			break;
 		case nine_IS_PRESSED:
-			chord1->Pluck();
+			normalChord[0]->Pluck();
 			mvprintw(12, 10, "Event: Pluck on string 1\n");
 			break;
 		// String 2
 		case w_IS_PRESSED:
-			chord2->ReleaseFromString();
+			normalChord[1]->ReleaseFromString();
 			mvprintw(12, 10, "Event: Release string from string 2\n");
 			break;
 		case e_IS_PRESSED:
-			chord2->PressOnString(1);
+			normalChord[1]->PressOnString(1);
 			mvprintw(12, 10, "Event: Press position 1 on string 2\n");
 			break;
 		case r_IS_PRESSED:
-			chord2->PressOnString(2);
+			normalChord[1]->PressOnString(2);
 			mvprintw(12, 10, "Event: Press position 2 on string 2\n");
 			break;
 		case u_IS_PRESSED:
-			chord2->PressOnString(3);
+			normalChord[1]->PressOnString(3);
 			mvprintw(12, 10, "Event: Press position 3 on string 2\n");
 			break;
 		case i_IS_PRESSED:
-			chord2->PressOnString(4);
+			normalChord[1]->PressOnString(4);
 			mvprintw(12, 10, "Event: Press position 4 on string 2\n");
 			break;
 		case o_IS_PRESSED:
-			chord2->Pluck();
+			normalChord[1]->Pluck();
 			mvprintw(12, 10, "Event: Pluck on string 2\n");
 			break;
 		// String 3
 		case s_IS_PRESSED:
-			chord3->ReleaseFromString();
+			normalChord[2]->ReleaseFromString();
 			mvprintw(12, 10, "Event: Release string from string 3\n");
 			break;
 		case d_IS_PRESSED:
-			chord3->PressOnString(1);
+			normalChord[2]->PressOnString(1);
 			mvprintw(12, 10, "Event: Press position 1 on string 3\n");
 			break;
 		case f_IS_PRESSED:
-			chord3->PressOnString(2);
+			normalChord[2]->PressOnString(2);
 			mvprintw(12, 10, "Event: Press position 2 on string 3\n");
 			break;
 		case j_IS_PRESSED:
-			chord3->PressOnString(3);
+			normalChord[2]->PressOnString(3);
 			mvprintw(12, 10, "Event: Press position 3 on string 3\n");
 			break;
 		case k_IS_PRESSED:
-			chord3->PressOnString(4);
+			normalChord[2]->PressOnString(4);
 			mvprintw(12, 10, "Event: Press position 4 on string 3\n");
 			break;
 		case l_IS_PRESSED:
-			chord3->Pluck();
+			normalChord[2]->Pluck();
 			mvprintw(12, 10, "Event: Pluck on string 3\n");
 			break;
 		// String 4
 		case x_IS_PRESSED:
-			chord4->ReleaseFromString();
+			normalChord[3]->ReleaseFromString();
 			mvprintw(12, 10, "Event: Release string from string 4\n");
 			break;
 		case c_IS_PRESSED:
-			chord4->PressOnString(1);
+			normalChord[3]->PressOnString(1);
 			mvprintw(12, 10, "Event: Press position 1 on string 4\n");
 			break;
 		case v_IS_PRESSED:
-			chord4->PressOnString(2);
+			normalChord[3]->PressOnString(2);
 			mvprintw(12, 10, "Event: Press position 2 on string 4\n");
 			break;
 		case m_IS_PRESSED:
-			chord4->PressOnString(3);
+			normalChord[3]->PressOnString(3);
 			mvprintw(12, 10, "Event: Press position 3 on string 4\n");
 			break;
 		case mm_IS_PRESSED:
-			chord4->PressOnString(4);
+			normalChord[3]->PressOnString(4);
 			mvprintw(12, 10, "Event: Press position 4 on string 4\n");
 			break;
 		case mmm_IS_PRESSED:
-			chord4->Pluck();
+			normalChord[3]->Pluck();
 			mvprintw(12, 10, "Event: Pluck on string 4\n");
 			break;
 		// All string
 		case SPACE_IS_PRESSED:
-			chord1->Pluck();
-			chord2->Pluck();
-			chord3->Pluck();
-			chord4->Pluck();
+			normalChord[0]->Pluck();
+			normalChord[1]->Pluck();
+			normalChord[2]->Pluck();
+			normalChord[3]->Pluck();
 			mvprintw(12, 10, "Event: Pluck on all strings\n");
 			break;
 		// System
 		case q_IS_PRESSED:
 			appIsRunning = false;
 			break;
+	}
+
+	// Long press to quit
+	if (eventType == eight_IS_PRESSED)
+		if (restartCounter++ == 10)
+			appIsRunning = false;
+	else
+		restartCounter == 0;
+
+	// Long press to quit
+	if (eventType == three_IS_PRESSED)
+		if (specialCounter++ == 10) {
+			specialSound->Play();
+			specialCounter = 0;
+		}
+	else
+		restartCounter == 0;
+}
+
+void
+HappyEventHandler(enum EventType eventType)
+{
+	if (eventType == SPACE_IS_PRESSED) {
+		switch (++happyCount) {
+			case 1:
+				normalChord[0]->PressOnString(1);
+				normalChord[0]->Pluck();
+				break;
+			case 2:
+				normalChord[0]->PressOnString(2);
+				normalChord[0]->Pluck();
+				break;
+			case 3:
+				normalChord[0]->PressOnString(3);
+				normalChord[0]->Pluck();
+				break;
+			case 4:
+				normalChord[0]->PressOnString(4);
+				normalChord[0]->Pluck();
+				break;
+			case 5:
+				normalChord[0]->PressOnString(1);
+				normalChord[0]->Pluck();
+				break;
+			case 6:
+				normalChord[0]->PressOnString(2);
+				normalChord[0]->Pluck();
+				break;
+			case 7:
+				appMode = APP_NORMAL_MODE;
+				happyCount = 0;
+				secretIsOn = false;
+				break;
+		}
 	}
 }
 
@@ -313,6 +396,8 @@ CodeHandler()
 	} else {
 		passwdQueue.pop();
 		secretIsOn = true;
+		appMode = APP_HAPPY_MODE;
+		happySound->Play();
 		mvprintw(30, 10, "SECRET IS ON!!\n");
 	}
 }
@@ -322,17 +407,20 @@ CleanUp()
 {
 	SoundEngine::Quit();
 
-	delete chord1;
-	chord1 = NULL;
+	delete normalChord[0];
+	normalChord[0] = NULL;
 
-	delete chord2;
-	chord2 = NULL;
+	delete normalChord[1];
+	normalChord[1] = NULL;
 	
-	delete chord3;
-	chord3 = NULL;
+	delete normalChord[2];
+	normalChord[2] = NULL;
 
-	delete chord4;
-	chord4 = NULL;
+	delete normalChord[3];
+	normalChord[3] = NULL;
+
+	delete happySound;
+	happySound = NULL;
 
 	endwin();
 }
@@ -472,10 +560,18 @@ main(int argc, char* argv[])
 
 	enum EventType event;
 	while (appIsRunning) {
+		// Main event handler
 		while (!keyEventQueue.empty()) {
 			event = keyEventQueue.front();
 			keyEventQueue.pop();
-			EventHandler(event);
+			switch (appMode) {
+				case APP_NORMAL_MODE:
+					NormalEventHandler(event);
+					break;
+				case APP_HAPPY_MODE:
+					HappyEventHandler(event);
+					break;
+			}
 		}
 		// Handle password
 		while (passwdQueue.size() >= 10 && !secretIsOn)
