@@ -28,6 +28,8 @@ int UKflex()
 	flexrate1 = map(flexSensorReading1, 512, 614, 0, 100);
 	flexrate2 = map(flexSensorReading2, 512, 614, 0, 100);
 	flexrate3 = map(flexSensorReading3, 512, 614, 0, 100);
+
+	returnValue = 0;
 	//*****finish get the % of flex sensor
 
 	//*****start to reset toggle
@@ -42,7 +44,7 @@ int UKflex()
 	//*****finish reset toggle signal
 
 	//*****start to flex sensor buf write and toggle status
-	if(toggle[0]==toggle[1]==toggle[2]==toggle[3] == 0){
+	if(toggle[0]==0 && toggle[1]==0 && toggle[2]==0 && toggle[3]==0){
 		if(flexrate0<50){
 			toggle[0]=1;
 			returnValue=1;
