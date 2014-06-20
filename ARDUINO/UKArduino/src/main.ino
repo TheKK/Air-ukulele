@@ -37,8 +37,10 @@ void loop()
 		running++;
 		gun++;
 	}
-	else if (isFlex == 5 && running > 0)
-		running--;
+	else if (isFlex == 5){
+		if(running > 0)
+			running--;
+	}
 	else if (isFlex == 6)
 		isCut = 1;
 	else if (isFlex == 7){
@@ -72,7 +74,7 @@ void loop()
 		radio_SendData('P'); delay(500);
 		radio_SendData('P'); delay(250);
 		radio_SendData('C'); delay(250);
-		radio_SendData('P'); delay(250);
+		radio_SendData('P');
 		running = 0;
 	}
 
