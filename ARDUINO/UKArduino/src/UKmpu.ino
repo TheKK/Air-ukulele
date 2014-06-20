@@ -19,12 +19,9 @@ int UKmpu(){
 	n = ax;
 
 	if (i == 0 && n - p >= 5000){
-		Serial.println("Shake");
-		Serial.println(n - p);
 		i = 1;
 	}
 	if (i == 1 && n - p < 5000){
-		Serial.println("Stop shake");
 		i = 0;
 	}
 

@@ -87,35 +87,35 @@ Init()
 		return 1;
 
 	chord1 = new Chord(
-			"./sound/sound.wav",
-			"./sound/star2.wav",
-			"./sound/star3.wav",
-			"./sound/star4.wav",
-			"./sound/star5.wav"
+			"./sound/audio/Q0.wav",
+			"./sound/audio/Q1.wav",
+			"./sound/audio/Q2.wav",
+			"./sound/audio/Q3.wav",
+			"./sound/audio/Q4.wav"
 			);
 
 	chord2 = new Chord(
-			"./sound/sound.wav",
-			"./sound/star2.wav",
-			"./sound/star3.wav",
-			"./sound/star4.wav",
-			"./sound/star5.wav"
+			"./sound/audio/W0.wav",
+			"./sound/audio/W1.wav",
+			"./sound/audio/W2.wav",
+			"./sound/audio/W3.wav",
+			"./sound/audio/W4.wav"
 			);
 
 	chord3 = new Chord(
-			"./sound/sound.wav",
-			"./sound/star2.wav",
-			"./sound/star3.wav",
-			"./sound/star4.wav",
-			"./sound/star5.wav"
+			"./sound/audio/E0.wav",
+			"./sound/audio/E1.wav",
+			"./sound/audio/E2.wav",
+			"./sound/audio/E3.wav",
+			"./sound/audio/E4.wav"
 			);
 
 	chord4 = new Chord(
-			"./sound/sound.wav",
-			"./sound/star2.wav",
-			"./sound/star3.wav",
-			"./sound/star4.wav",
-			"./sound/star5.wav"
+			"./sound/audio/R0.wav",
+			"./sound/audio/R1.wav",
+			"./sound/audio/R2.wav",
+			"./sound/audio/R3.wav",
+			"./sound/audio/R4.wav"
 			);
 	//Ncurses
 	initscr();
