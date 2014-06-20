@@ -101,12 +101,14 @@ Chord* normalChord[4];
 Sound* happySound;
 Sound* specialSound;
 
-NRF24 radio(0, 40, 4000000, 10, 6);
+NRF24* radio;
 
 int
 Init()
 {
 	wiringPiSetup();
+
+	radio = new NRF24(0, 40, 4000000, 10, 6);
 
 	if (SoundEngine::Init() < 0)
 		return 1;
@@ -413,6 +415,9 @@ CleanUp()
 {
 	SoundEngine::Quit();
 
+	delete radio;
+	radio = NULL;
+
 	delete normalChord[0];
 	normalChord[0] = NULL;
 
@@ -561,7 +566,7 @@ Listener()
 	unsigned char symbol;
 
 	while (appIsRunning) {
-		symbol = radio.ReceiveData();
+		symbol = radio->ReceiveData();
 		switch (symbol) {
 			case 0:
 				break;
