@@ -17,7 +17,6 @@ int toggle[4] = {0};
 int benchMark = 40;
 int returnValue = 0;
 
-
 int UKflex()
 {
 	//*****start get flexsensor's status
@@ -35,16 +34,22 @@ int UKflex()
 	//*****finish get the % of flex sensor
 
 	//*****start to reset toggle
-	if(flexrate0 >= benchMark && toggle[0] == 1)
+	if(flexrate0 >= benchMark && toggle[0] == 1){
 		toggle[0] = 0;
+		returnValue = 5;
+	}
 	if(flexrate1 >= benchMark && toggle[1] == 1){
 		toggle[1] = 0;
-		return 5;
+		returnValue = 6;
 	}
-	if(flexrate2 >= benchMark && toggle[2] == 1)
+	if(flexrate2 >= benchMark && toggle[2] == 1){
 		toggle[2] = 0;
-	if(flexrate3 >= benchMark && toggle[3] == 1)
+		returnValue = 7;
+	}
+	if(flexrate3 >= benchMark && toggle[3] == 1){
 		toggle[3] = 0;
+		returnValue = 8;
+	}
 	//*****finish reset toggle signal
 
 	//*****start to flex sensor buf write and toggle status
