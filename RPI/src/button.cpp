@@ -32,14 +32,18 @@ Button::State()
 			currentValue[2] == 0 &&
 			previousState != BUTTON_ALL_RELEASE
 	   ) {
-		previousState == BUTTON_ALL_RELEASE;
+		previousState = BUTTON_ALL_RELEASE;
 		return BUTTON_ALL_RELEASE;
-	} else if (
+	}
+
+	if (
 			currentValue[0] == 1 &&
 			currentValue[1] == 0 &&
 			currentValue[2] == 0 &&
 			previousState != BUTTON1_PRESSED
 	   ) {
+		previousState = BUTTON1_PRESSED;
+		return BUTTON1_PRESSED;
 	}
 
 	if (
@@ -48,6 +52,8 @@ Button::State()
 			currentValue[2] == 0 &&
 			previousState != BUTTON2_PRESSED
 	   ) {
+		previousState = BUTTON2_PRESSED;
+		return BUTTON2_PRESSED;
 	}
 
 	if (
@@ -56,6 +62,8 @@ Button::State()
 			currentValue[2] == 0 &&
 			previousState != BUTTON3_PRESSED
 	   ) {
+		previousState = BUTTON3_PRESSED;
+		return BUTTON3_PRESSED;
 	}
 
 	if (
@@ -64,6 +72,8 @@ Button::State()
 			currentValue[2] == 1 &&
 			previousState != BUTTON4_PRESSED
 	   ) {
+		previousState = BUTTON4_PRESSED;
+		return BUTTON4_PRESSED;
 	}
 
 	if (
@@ -72,5 +82,9 @@ Button::State()
 			currentValue[2] == 1 &&
 			previousState != BUTTON5_PRESSED
 	   ) {
+		previousState = BUTTON5_PRESSED;
+		return BUTTON5_PRESSED;
 	}
+
+	return BUTTON_NOTHING;
 }

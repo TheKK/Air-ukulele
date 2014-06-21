@@ -94,7 +94,8 @@ enum EventType
 	// System
 	QUIT_IS_PRESENT,
 	PLUCK_IS_PRESENT,
-	CUT_IS_PRESENT
+	CUT_IS_PRESENT,
+	GUN_IS_SHOT
 };
 
 bool appIsRunning = true;
@@ -110,6 +111,7 @@ Chord* normalChord[NUMBER_OF_STRING];
 Sound* cutSound;
 Sound* happySound;
 Sound* specialSound;
+Sound* gunSound;
 
 NRF24* radio;
 
@@ -177,6 +179,7 @@ Init()
 	cutSound = new Sound("./sound/audio/cut.wav");
 	happySound = new Sound("./sound/happyMode.wav");
 	specialSound = new Sound("./sound/audio/special.wav");
+	gunSound = new Sound("./suond/GunN.wav");
 
 	appMode = APP_NORMAL_MODE;
 
@@ -309,6 +312,9 @@ NormalEventHandler(enum EventType eventType)
 		case CUT_IS_PRESENT:
 			cutSound->Play();
 			mvprintw(12, 10, "Event: Cut on all strings\n");
+			break;
+		case GUN_IS_SHOT:
+			gunSound->Play();
 			break;
 		// System
 		case QUIT_IS_PRESENT:
@@ -668,6 +674,9 @@ Listener()
 				break;
 			case 'C':
 				keyEventQueue.push(CUT_IS_PRESENT);
+				break;
+			case 'G':
+				keyEventQueue.push(GUN_IS_SHOT);
 				break;
 			default:
 				break;

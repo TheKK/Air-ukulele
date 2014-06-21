@@ -32,7 +32,9 @@ enum ApplicationMode
 
 enum SoundSet
 {
-	SOUNDSET_NORMAL = 0x00
+	SOUNDSET_NORMAL = 0x00,
+	SOUNDSET_SPECIAL,
+	SOUNDSET_NEO
 };
 
 //Normal mode variables
@@ -95,10 +97,27 @@ queue<enum EventType> keyEventQueue;
 bool secretIsOn = false;
 queue<enum EventType> passwdQueue;
 
+queue<enum EventType> soundsetQueue;
+
+#define NUMBER_OF_STRING	4
 Chord* currentChord[4];
 Chord* normalChord[4];
+Chord* neoChord[4];
 Sound* happySound;
 Sound* specialSound;
+
+void
+ChangeSoundset(enum SoundSet set)
+{
+	switch (set) {
+		case SOUNDSET_NORMAL:
+			for (int i = 0; i < NUMBER_OF_STRING; i++)
+				currentChord[i] = normalChord[i];
+			break;
+		case SOUNDSET_SPECIAL:
+			break;
+	}
+}
 
 int
 Init()
@@ -140,6 +159,42 @@ Init()
 			"./sound/audio/R3.wav",
 			"./sound/audio/R4.wav",
 			"./sound/audio/R5.wav"
+			);
+
+	neoChord[0] = new Chord(
+			"./sound/neo-audio/Q0.wav",
+			"./sound/neo-audio/Q1.wav",
+			"./sound/neo-audio/Q2.wav",
+			"./sound/neo-audio/Q3.wav",
+			"./sound/neo-audio/Q4.wav",
+			"./sound/neo-audio/Q5.wav"
+			);
+
+	neoChord[1] = new Chord(
+			"./sound/neo-audio/W0.wav",
+			"./sound/neo-audio/W1.wav",
+			"./sound/neo-audio/W2.wav",
+			"./sound/neo-audio/W3.wav",
+			"./sound/neo-audio/W4.wav",
+			"./sound/neo-audio/W5.wav"
+			);
+
+	neoChord[2] = new Chord(
+			"./sound/neo-audio/E0.wav",
+			"./sound/neo-audio/E1.wav",
+			"./sound/neo-audio/E2.wav",
+			"./sound/neo-audio/E3.wav",
+			"./sound/neo-audio/E4.wav",
+			"./sound/neo-audio/E5.wav"
+			);
+
+	neoChord[3] = new Chord(
+			"./sound/neo-audio/R0.wav",
+			"./sound/neo-audio/R1.wav",
+			"./sound/neo-audio/R2.wav",
+			"./sound/neo-audio/R3.wav",
+			"./sound/neo-audio/R4.wav",
+			"./sound/neo-audio/R5.wav"
 			);
 
 	currentChord[0] = normalChord[0];
@@ -450,6 +505,37 @@ CodeHandler()
 }
 
 void
+SoundsetHandler()
+{
+	if (passwdQueue.front() != three_IS_PRESSED) {
+		passwdQueue.pop();
+		return;
+	} else
+		passwdQueue.pop();
+
+	if (passwdQueue.front() != e_IS_PRESSED) {
+		passwdQueue.pop();
+		return;
+	} else
+		passwdQueue.pop();
+
+	if (passwdQueue.front() != d_IS_PRESSED) {
+		passwdQueue.pop();
+		return;
+	} else
+		passwdQueue.pop();
+
+	if (passwdQueue.front() != c_IS_PRESSED) {
+		passwdQueue.pop();
+		return;
+	} else {
+		passwdQueue.pop();
+		ChangeSoundset(SOUNDSET_NEO);
+		mvprintw(30, 10, "SOUNDSET IS CHANGED!!\n");
+	}
+}
+
+void
 CleanUp()
 {
 	SoundEngine::Quit();
@@ -593,6 +679,7 @@ StateChcker()
 
 			keyEventQueue.push(eventType);
 			passwdQueue.push(eventType);
+			soundsetQueue.push(eventType);
 		}
 	}
 }
@@ -623,6 +710,9 @@ main(int argc, char* argv[])
 		// Handle password
 		while (passwdQueue.size() >= 10 && !secretIsOn)
 			CodeHandler();
+		// Handle soundset
+		while (passwdQueue.size() >= 4)
+			SoundsetHandler();
 	}
 
 	//Make sure they will get together
