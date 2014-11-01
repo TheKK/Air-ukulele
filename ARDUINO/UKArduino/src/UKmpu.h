@@ -9,6 +9,6 @@
     #include "Wire.h"
 #endif
 
-int UKmpu();
+int UKmpu_isShaked();
 
 void UKmpu_Setup();

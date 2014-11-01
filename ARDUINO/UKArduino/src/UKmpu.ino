@@ -16,7 +16,7 @@ int nextTotal = 0;
 int preTotal = 0;
 int checkTotal = 0;
 
-int UKmpu(){
+int UKmpu_isShaked() {
 	mpuReturn = 0;
 	accelgyro.getAcceleration(&ax, &ay, &az);
 	nextTotal = ax + ay + az;

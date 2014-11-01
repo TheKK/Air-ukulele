@@ -1,2 +1,1 @@
-int UKflex();
- 
+int UKisFlex(int which);
