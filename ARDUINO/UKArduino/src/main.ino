@@ -13,6 +13,7 @@ void
 setup()
 {
 	Serial.begin(9600);
+	UKflex_init();
 	UKmpu_Setup();
 	radio_Setup();
 }
@@ -20,16 +21,16 @@ setup()
 void
 loop()
 {
-	if (UKisFlex(0)) {
+	if (UKflex_isBended(0))
 		radio_SendData('R');	// da mu zi
 
-	if (UKisFlex(1))
+	if (UKflex_isBended(1))
 		radio_SendData('E');	// shi zi
 
-	if (UKisFlex(2))
+	if (UKflex_isBended(2))
 		radio_SendData('W');	// zong zi
 
-	if (UKisFlex(3))
+	if (UKflex_isBended(3))
 		radio_SendData('Q');	// wu min zi
 
     if (UKmpu_isShaked()) {
