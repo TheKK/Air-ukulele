@@ -1,31 +1,35 @@
-int flexSensorPin[4];
+#include "UKflex.h"
 
-int flexSensorRaw[4];
-int flexrate[4];
-int isBended[4] = {0};
+int flexSensorPin[FINGER_COUNT];
+int isBended[FINGER_COUNT] = {0};
 
-int benchMark = 40;
+int flexSensorRaw;
+int flexrate;
+int threshold = 60;
 
-void
-UKflex_init()
+int
+UKflex_setup()
 {
-	flexSensorPin[0] = A3;  // da mu zi*/
-	flexSensorPin[1] = A0;	// shi zi
-	flexSensorPin[2] = A1;	// zong zi
-	flexSensorPin[3] = A2;	// wu min zi
+	flexSensorPin[FINGER_THUMB] =	A3;
+	flexSensorPin[FINGER_INDEX] =	A0;
+	flexSensorPin[FINGER_MID] =	A1;
+	flexSensorPin[FINGER_RING] =	A2;
 }
 
 int
-UKflex_isBended(int which)
+UKflex_isTriggered(int which)
 {
-	flexSensorRaw[which] = analogRead(flexSensorPin[which]); 
-	flexrate[which] = map(flexSensorRaw[which], 250, 500, 0, 100);
+	flexSensorRaw = analogRead(flexSensorPin[which]);
+	flexrate = map(flexSensorRaw, 250, 500, 0, 100);
 
-	if ((flexrate[which] >= benchMark) && (isBended[which] == 1))
-		isBended[0] = 0;
+	// You triggered
+	if ((flexrate >= threshold) && (isBended[which] == 0)) {
+		isBended[which] = 1;
+		return 1;
+	}
 
-    if ((flexrate[which] < benchMark) && (isBended[which] == 0))
-        isBended[which] = 1;
+	if ((flexrate < threshold) && (isBended[which] == 1))
+		isBended[which] = 0;
 
-	return isBended[which];
+	return 0;
 }

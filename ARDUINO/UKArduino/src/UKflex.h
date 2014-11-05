@@ -1,10 +1,12 @@
 enum UKFLEX_FINGERS
 {
-	THUMB = 0,
-	INDEX_FINGER,
-	MID_FINGER,
-	RING_FINGER
+	FINGER_THUMB = 0,
+	FINGER_INDEX,
+	FINGER_MID,
+	FINGER_RING,
+
+	FINGER_COUNT
 };
 
-int UKflex_init();
-int UKflex_isBended(int which);
+int UKflex_setup();
+int UKflex_isTriggered(int which);
