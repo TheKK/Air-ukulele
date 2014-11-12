@@ -18,25 +18,19 @@ using namespace std;
 
 enum ButtonState
 {
-	BUTTON_NOTHING = 0x01,
-	BUTTON_ALL_RELEASE,
-	BUTTON1_PRESSED,
-	BUTTON2_PRESSED,
-	BUTTON3_PRESSED,
-	BUTTON4_PRESSED,
-	BUTTON5_PRESSED
+    BUTTON_NOTHING = 0x00,
+    BUTTON_PRESSED,
+    BUTTON_RELEASED
 };
 
 class Button
 {
 	public:
-		Button(int pin1, int pin2, int pin3);
-
+		Button(int pinNum);
 		enum ButtonState State();
 	private:
-		int pinNumber_[3];
-		enum ButtonState previousState = BUTTON_NOTHING;
-		
+		int pinNum_;
+        int prevValue_;
 };
 
 #endif
