@@ -8,5 +8,12 @@ enum UKFLEX_FINGERS
 	FINGER_COUNT
 };
 
+enum UKFLEX_STATUS
+{
+    UK_PRESSED = 0x00,
+    UK_RELEASED
+};
+
 int UKflex_setup();
 int UKflex_isTriggered(int which);
+int UKflex_getStatus(int which);
